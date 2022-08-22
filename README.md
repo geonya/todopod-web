@@ -6,5 +6,5 @@ _220822_
 
 #### TODO List
 
-- [ ] Create Next.js App
+- [x] Create Next.js App
 - [ ] Apollo Client Setup
