@@ -2020,7 +2020,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "GetProjectsInputType",
+        "name": "GetProjectsInput",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -4192,7 +4192,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "GetProjectsInputType",
+                    "name": "GetProjectsInput",
                     "ofType": null
                   }
                 },

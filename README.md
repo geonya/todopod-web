@@ -7,4 +7,8 @@ _220822_
 #### TODO List
 
 - [x] Create Next.js App
-- [ ] Apollo Client Setup
+- [x] Apollo Client Setup
+  - [x] codegen setup
+- [ ] Query Test
+- [ ] Create Login/Create Account Page using react-hook-form
+- [ ] setup MantineUI

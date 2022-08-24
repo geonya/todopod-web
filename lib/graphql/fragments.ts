@@ -8,3 +8,18 @@ gql`
     }
   }
 `
+
+export const GET_PROJECTS_QUERY = gql`
+  query GetProjects($getProjectsInput: GetProjectsInput!) {
+    getProjects(input: $getProjectsInput) {
+      ok
+      error
+      projects {
+        id
+        title
+      }
+      totalProjectsCount
+      totalPages
+    }
+  }
+`

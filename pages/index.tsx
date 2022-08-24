@@ -1,13 +1,28 @@
-import type { GetStaticProps, NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
+import ProjectsList, {
+  getProjectsQueryVariables,
+} from '../components/ProjectsList'
+import { addApolloState, initializeApollo } from '../lib/apolloClient'
+import { GET_PROJECTS_QUERY } from '../lib/graphql/fragments'
 
 const Home: NextPage = () => {
-  return <div>todopod web</div>
+  return (
+    <div>
+      <ProjectsList />
+    </div>
+  )
 }
 
-export const getStaticProps: GetStaticProps = () => {
-  return {
+export const getServerSideProps: GetServerSideProps = async () => {
+  const apolloClient = initializeApollo()
+
+  await apolloClient.query({
+    query: GET_PROJECTS_QUERY,
+    variables: getProjectsQueryVariables,
+  })
+  return addApolloState(apolloClient, {
     props: {},
-  }
+  })
 }
 
 export default Home

@@ -5,46 +5,46 @@ import {
   HttpLink,
   InMemoryCache,
   makeVar,
+  ApolloError,
   NormalizedCacheObject,
 } from '@apollo/client'
 import { APOLLO_STATE_PROP_NAME, LOCALSTORAGE_TOKEN } from '../constants'
 import merge from 'deepmerge'
 import { isEqual } from 'lodash'
 import { useMemo } from 'react'
-
-const token = localStorage.getItem(LOCALSTORAGE_TOKEN)
-export const isLoggedInVar = makeVar(Boolean(token))
-export const authTokenVar = makeVar(token)
+import { onError } from '@apollo/client/link/error'
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
-const httpLink = new HttpLink({ uri: 'http://localhost:4000/graphql' })
+const httpLink = new HttpLink({
+  uri: 'http://localhost:4000/graphql',
+})
 const authLink = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers }: { headers: any }) => ({
-    headers: { 'jwt-token': authTokenVar() || '', ...headers },
+    headers: { ...headers },
   }))
   return forward(operation)
 })
-const additiveLink = from([authLink, httpLink])
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+      ),
+    )
+  if (networkError) console.log(`[Network error]: ${networkError}`)
+})
+
+const additiveLink = from([errorLink, httpLink])
 
 function createApolloClient() {
   return new ApolloClient({
+    ssrMode: typeof window === 'undefined',
     link: additiveLink,
     cache: new InMemoryCache({
       typePolicies: {
         Query: {
-          fields: {
-            isLoggedIn: {
-              read() {
-                return isLoggedInVar()
-              },
-            },
-            token: {
-              read() {
-                return authTokenVar()
-              },
-            },
-          },
+          fields: {},
         },
       },
     }),
@@ -64,9 +64,13 @@ export function initializeApollo(initialState = null) {
         ),
       ],
     })
-
     _apolloClient.cache.restore(data)
   }
+
+  if (typeof window === 'undefined') return _apolloClient
+  if (!apolloClient) apolloClient = _apolloClient
+
+  return _apolloClient
 }
 
 export function addApolloState(
@@ -82,4 +86,5 @@ export function addApolloState(
 export function useApollo(pageProps: any) {
   const state = pageProps[APOLLO_STATE_PROP_NAME]
   const store = useMemo(() => initializeApollo(state), [state])
+  return store
 }
