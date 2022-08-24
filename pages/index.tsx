@@ -15,7 +15,6 @@ const Home: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const apolloClient = initializeApollo()
-
   await apolloClient.query({
     query: GET_PROJECTS_QUERY,
     variables: getProjectsQueryVariables,

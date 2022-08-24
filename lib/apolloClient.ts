@@ -5,7 +5,6 @@ import {
   HttpLink,
   InMemoryCache,
   makeVar,
-  ApolloError,
   NormalizedCacheObject,
 } from '@apollo/client'
 import { APOLLO_STATE_PROP_NAME, LOCALSTORAGE_TOKEN } from '../constants'
@@ -15,13 +14,20 @@ import { useMemo } from 'react'
 import { onError } from '@apollo/client/link/error'
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
+let token: string | null = null
+
+if (typeof window !== 'undefined') {
+  token = localStorage.getItem(LOCALSTORAGE_TOKEN)
+}
+export const isLoggedInVar = makeVar(Boolean(token))
+export const authTokenVar = makeVar(token)
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4000/graphql',
 })
 const authLink = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers }: { headers: any }) => ({
-    headers: { ...headers },
+    headers: { 'jwt-token': authTokenVar() || '', ...headers },
   }))
   return forward(operation)
 })
@@ -35,7 +41,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error]: ${networkError}`)
 })
 
-const additiveLink = from([errorLink, httpLink])
+const additiveLink = from([authLink, errorLink, httpLink])
 
 function createApolloClient() {
   return new ApolloClient({

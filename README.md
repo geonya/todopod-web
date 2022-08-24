@@ -9,6 +9,6 @@ _220822_
 - [x] Create Next.js App
 - [x] Apollo Client Setup
   - [x] codegen setup
-- [ ] Query Test
-- [ ] Create Login/Create Account Page using react-hook-form
+- [x] Query Test
 - [ ] setup MantineUI
+- [ ] Create Login/Create Account Page using react-hook-form

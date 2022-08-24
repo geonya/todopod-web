@@ -11,15 +11,35 @@
   },
   "dependencies": {
     "@apollo/client": "^3.6.9",
+    "@emotion/react": "^11.10.0",
+    "@emotion/server": "^11.10.0",
+    "@mantine/carousel": "^5.2.3",
+    "@mantine/core": "^5.2.3",
+    "@mantine/dates": "^5.2.3",
+    "@mantine/dropzone": "^5.2.3",
+    "@mantine/form": "^5.2.3",
+    "@mantine/hooks": "^5.2.3",
+    "@mantine/modals": "^5.2.3",
+    "@mantine/next": "^5.2.3",
+    "@mantine/notifications": "^5.2.3",
+    "@mantine/rte": "^5.2.3",
+    "@mantine/spotlight": "^5.2.3",
+    "dayjs": "^1.11.5",
     "deepmerge": "^4.2.2",
+    "embla-carousel-react": "^7.0.1",
     "graphql": "^16.6.0",
     "lodash": "^4.17.21",
     "next": "12.2.5",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "stylis-plugin-rtl": "^2.1.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "2.11.6",
+    "@graphql-codegen/introspection": "2.2.1",
+    "@graphql-codegen/typescript": "2.7.3",
+    "@graphql-codegen/typescript-operations": "2.5.3",
+    "@graphql-codegen/typescript-react-apollo": "3.3.3",
     "@types/deepmerge": "^2.2.0",
     "@types/lodash": "^4.14.184",
     "@types/node": "18.7.9",
@@ -27,10 +47,6 @@
     "@types/react-dom": "18.0.6",
     "eslint": "8.22.0",
     "eslint-config-next": "12.2.5",
-    "typescript": "4.7.4",
-    "@graphql-codegen/typescript": "2.7.3",
-    "@graphql-codegen/typescript-operations": "2.5.3",
-    "@graphql-codegen/typescript-react-apollo": "3.3.3",
-    "@graphql-codegen/introspection": "2.2.1"
+    "typescript": "4.7.4"
   }
 }

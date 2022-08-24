@@ -1,5 +1,7 @@
 import { NetworkStatus } from '@apollo/client'
+import { Button } from '@mantine/core'
 import { useGetProjectsQuery } from '../lib/graphql/__generated__'
+import { NextLink } from '@mantine/next'
 
 export const getProjectsQueryVariables = {
   getProjectsInput: { page: 1 },
@@ -31,9 +33,9 @@ export default function ProjectsList() {
           </li>
         ))}
       </ul>
-      <button onClick={() => loadMoreProjects()} disabled={loadingMoreProjects}>
+      <Button component={NextLink} href='/hello'>
         {loadingMoreProjects ? 'Loading...' : 'Show More'}
-      </button>
+      </Button>
     </section>
   )
 }
