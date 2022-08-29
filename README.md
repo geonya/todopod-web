@@ -12,5 +12,7 @@ _220822_
 - [x] Query Test
 - [x] setup MantineUI
 - [x] Next Middleware
-- [x] React-Hook-Form Setup
+- [ ] Mantine Form
 - [ ] Create Account
+- [ ] Token Setup
+- [ ] Login Page
