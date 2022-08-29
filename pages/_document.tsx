@@ -6,9 +6,8 @@ import Document, {
   Main,
   NextScript,
 } from 'next/document'
-import { rtlCache } from '../lib/rtl-cache'
 
-const stylesServer = createStylesServer(rtlCache)
+const stylesServer = createStylesServer()
 
 export default class _Document extends Document {
   static async getInitailProps(ctx: DocumentContext) {

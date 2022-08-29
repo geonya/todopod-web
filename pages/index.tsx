@@ -1,16 +1,10 @@
 import type { GetServerSideProps, NextPage } from 'next'
-import ProjectsList, {
-  getProjectsQueryVariables,
-} from '../components/ProjectsList'
-import { addApolloState, initializeApollo } from '../lib/apolloClient'
-import { GET_PROJECTS_QUERY } from '../lib/graphql/fragments'
+import { getProjectsQueryVariables } from '../components/ProjectsList'
+import { addApolloState, initializeApollo } from '../lib/server/apolloClient'
+import { GET_PROJECTS_QUERY } from '../lib/graphql/schema'
 
 const Home: NextPage = () => {
-  return (
-    <div>
-      <ProjectsList />
-    </div>
-  )
+  return <div></div>
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {

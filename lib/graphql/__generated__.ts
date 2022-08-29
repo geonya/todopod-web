@@ -730,24 +730,38 @@ export type VerifyEmailOutput = {
   ok: Scalars['Boolean'];
 };
 
+export type ProjectFragmentFragment = { __typename?: 'Project', id: number, title: string, description?: string | null, creator: { __typename?: 'User', name: string }, tasks?: Array<{ __typename?: 'Task', name: string }> | null };
+
 export type CreateAccountMutationVariables = Exact<{
-  createAccountInput: CreateAccountInput;
+  input: CreateAccountInput;
 }>;
 
 
 export type CreateAccountMutation = { __typename?: 'Mutation', createAccount: { __typename?: 'CreateAccountOutput', ok: boolean, error?: string | null } };
 
 export type GetProjectsQueryVariables = Exact<{
-  getProjectsInput: GetProjectsInput;
+  input: GetProjectsInput;
 }>;
 
 
-export type GetProjectsQuery = { __typename?: 'Query', getProjects: { __typename?: 'GetProjectsOutput', ok: boolean, error?: string | null, totalProjectsCount?: number | null, totalPages?: number | null, projects?: Array<{ __typename?: 'Project', id: number, title: string }> | null } };
+export type GetProjectsQuery = { __typename?: 'Query', getProjects: { __typename?: 'GetProjectsOutput', ok: boolean, error?: string | null, totalProjectsCount?: number | null, totalPages?: number | null, projects?: Array<{ __typename?: 'Project', id: number, title: string, description?: string | null, creator: { __typename?: 'User', name: string }, tasks?: Array<{ __typename?: 'Task', name: string }> | null }> | null } };
 
-
+export const ProjectFragmentFragmentDoc = gql`
+    fragment ProjectFragment on Project {
+  id
+  title
+  description
+  creator {
+    name
+  }
+  tasks {
+    name
+  }
+}
+    `;
 export const CreateAccountDocument = gql`
-    mutation CreateAccount($createAccountInput: CreateAccountInput!) {
-  createAccount(input: $createAccountInput) {
+    mutation CreateAccount($input: CreateAccountInput!) {
+  createAccount(input: $input) {
     ok
     error
   }
@@ -768,7 +782,7 @@ export type CreateAccountMutationFn = Apollo.MutationFunction<CreateAccountMutat
  * @example
  * const [createAccountMutation, { data, loading, error }] = useCreateAccountMutation({
  *   variables: {
- *      createAccountInput: // value for 'createAccountInput'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -780,19 +794,18 @@ export type CreateAccountMutationHookResult = ReturnType<typeof useCreateAccount
 export type CreateAccountMutationResult = Apollo.MutationResult<CreateAccountMutation>;
 export type CreateAccountMutationOptions = Apollo.BaseMutationOptions<CreateAccountMutation, CreateAccountMutationVariables>;
 export const GetProjectsDocument = gql`
-    query GetProjects($getProjectsInput: GetProjectsInput!) {
-  getProjects(input: $getProjectsInput) {
+    query GetProjects($input: GetProjectsInput!) {
+  getProjects(input: $input) {
     ok
     error
     projects {
-      id
-      title
+      ...ProjectFragment
     }
     totalProjectsCount
     totalPages
   }
 }
-    `;
+    ${ProjectFragmentFragmentDoc}`;
 
 /**
  * __useGetProjectsQuery__
@@ -806,7 +819,7 @@ export const GetProjectsDocument = gql`
  * @example
  * const { data, loading, error } = useGetProjectsQuery({
  *   variables: {
- *      getProjectsInput: // value for 'getProjectsInput'
+ *      input: // value for 'input'
  *   },
  * });
  */

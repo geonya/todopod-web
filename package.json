@@ -17,13 +17,12 @@
     "@mantine/core": "^5.2.3",
     "@mantine/dates": "^5.2.3",
     "@mantine/dropzone": "^5.2.3",
-    "@mantine/form": "^5.2.3",
     "@mantine/hooks": "^5.2.3",
     "@mantine/modals": "^5.2.3",
     "@mantine/next": "^5.2.3",
     "@mantine/notifications": "^5.2.3",
-    "@mantine/rte": "^5.2.3",
     "@mantine/spotlight": "^5.2.3",
+    "@tabler/icons": "^1.86.0",
     "dayjs": "^1.11.5",
     "deepmerge": "^4.2.2",
     "embla-carousel-react": "^7.0.1",
@@ -32,6 +31,7 @@
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.34.2",
     "stylis-plugin-rtl": "^2.1.1"
   },
   "devDependencies": {

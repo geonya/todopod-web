@@ -1,5 +1,17 @@
 import { NetworkStatus } from '@apollo/client'
-import { Button } from '@mantine/core'
+import {
+  Badge,
+  Button,
+  ButtonProps,
+  Center,
+  Code,
+  createStyles,
+  Group,
+  Switch,
+  SwitchProps,
+  Text,
+  Title,
+} from '@mantine/core'
 import { useGetProjectsQuery } from '../lib/graphql/__generated__'
 import { NextLink } from '@mantine/next'
 
@@ -21,6 +33,7 @@ export default function ProjectsList() {
       },
     })
   }
+
   if (error) return <div>ERROR : {error.message}</div>
   if (loading && !loadingMoreProjects) return <div>Loading...</div>
 
@@ -33,9 +46,6 @@ export default function ProjectsList() {
           </li>
         ))}
       </ul>
-      <Button component={NextLink} href='/hello'>
-        {loadingMoreProjects ? 'Loading...' : 'Show More'}
-      </Button>
     </section>
   )
 }

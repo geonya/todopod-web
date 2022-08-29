@@ -10,5 +10,7 @@ _220822_
 - [x] Apollo Client Setup
   - [x] codegen setup
 - [x] Query Test
-- [ ] setup MantineUI
-- [ ] Create Login/Create Account Page using react-hook-form
+- [x] setup MantineUI
+- [x] Next Middleware
+- [x] React-Hook-Form Setup
+- [ ] Create Account

@@ -7,7 +7,7 @@ import {
   makeVar,
   NormalizedCacheObject,
 } from '@apollo/client'
-import { APOLLO_STATE_PROP_NAME, LOCALSTORAGE_TOKEN } from '../constants'
+import { APOLLO_STATE_PROP_NAME, LOCALSTORAGE_TOKEN } from '../../constants'
 import merge from 'deepmerge'
 import { isEqual } from 'lodash'
 import { useMemo } from 'react'
