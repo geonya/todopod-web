@@ -13,6 +13,7 @@ _220822_
 - [x] setup MantineUI
 - [x] Next Middleware
 - [ ] Mantine Form
-- [ ] Create Account
+- [ ] Create Account Page
+- [ ] Login Page
 - [ ] Token Setup
 - [ ] Login Page

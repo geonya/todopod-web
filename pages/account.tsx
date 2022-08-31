@@ -19,6 +19,7 @@ import { useGlobalStyles } from '../lib/client/styles/global'
 import { useState } from 'react'
 import { IconChevronDown, IconUser } from '@tabler/icons'
 import { useForm } from '@mantine/form'
+import { useRouter } from 'next/router'
 
 interface AccountFormValues {
   name: string
@@ -28,6 +29,7 @@ interface AccountFormValues {
 }
 
 const Account: NextPage = () => {
+  const router = useRouter()
   const [opened, setOpened] = useState(false)
   const { classes } = useGlobalStyles({ opened })
   const [selected, setSelected] = useState(UserRole['Client'])
@@ -73,11 +75,22 @@ const Account: NextPage = () => {
   )
 
   const [createAccountMutation, { data, loading, error }] =
-    useCreateAccountMutation()
+    useCreateAccountMutation({
+      onCompleted: (result) => {
+        const {
+          createAccount: { ok },
+        } = result
+        if (ok) {
+          router.push({
+            pathname: '/login',
+            query: { email: form.values.email },
+          })
+        }
+      },
+    })
 
   const onValid = (data: AccountFormValues) => {
     if (loading) return
-    console.log('hi')
     createAccountMutation({
       variables: {
         input: {
