@@ -6,7 +6,6 @@ import Head from 'next/head'
 import { NextPage } from 'next'
 import {
   Button,
-  createStyles,
   Group,
   Menu,
   Paper,
@@ -15,11 +14,11 @@ import {
   Title,
   UnstyledButton,
 } from '@mantine/core'
-import { useGlobalStyles } from '../lib/client/styles/global'
 import { useState } from 'react'
 import { IconChevronDown, IconUser } from '@tabler/icons'
 import { useForm } from '@mantine/form'
 import { useRouter } from 'next/router'
+import { useAuthStyles } from '../lib/client/styles/authStyles'
 
 interface AccountFormValues {
   name: string
@@ -31,7 +30,7 @@ interface AccountFormValues {
 const Account: NextPage = () => {
   const router = useRouter()
   const [opened, setOpened] = useState(false)
-  const { classes } = useAccountStyles({ opened })
+  const { classes } = useAuthStyles({ opened })
   const [selected, setSelected] = useState(UserRole['Client'])
   const form = useForm<AccountFormValues>({
     initialValues: { name: '', email: '', password: '', role: UserRole.Client },
@@ -170,31 +169,3 @@ const Account: NextPage = () => {
 }
 
 export default Account
-
-interface IParams {
-  opened: boolean
-}
-
-const useAccountStyles = createStyles((theme, params: IParams) => ({
-  wrapper: {
-    minHeight: 900,
-    backgroundSize: 'cover',
-    backgroundImage:
-      'url(https://images.unsplash.com/photo-1484242857719-4b9144542727?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80)',
-  },
-  form: {
-    borderRight: `1px solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]
-    }`,
-    minHeight: '100vh',
-    maxWidth: 500,
-    width: '100%',
-    paddingTop: 80,
-    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-      maxWidth: '100%',
-    },
-  },
-  title: {
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-  },
-}))

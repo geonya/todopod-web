@@ -1,6 +1,5 @@
 import {
   Button,
-  createStyles,
   Paper,
   PasswordInput,
   Text,
@@ -19,7 +18,7 @@ interface LoginFormValues {
 }
 
 const Login = () => {
-  const { classes } = useAuthStyles()
+  const { classes } = useAuthStyles({})
   const router = useRouter()
   console.log(router.query)
   const form = useForm<LoginFormValues>({
@@ -34,11 +33,11 @@ const Login = () => {
       <Head>
         <title>Log In | Todopod</title>
       </Head>
-      <div className={classes.authWrapper}>
+      <div className={classes.wrapper}>
         <Paper
           component='form'
           radius={0}
-          className={classes.authForm}
+          className={classes.form}
           p={30}
           onSubmit={form.onSubmit(onValid)}
         >
