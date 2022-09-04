@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { LOCALSTORAGE_TOKEN } from './constants'
 let token: string | null = null
-export function middleware(req: NextRequest) {
+export function middleware(req: NextRequest, res: NextResponse) {
   if (typeof window !== 'undefined') {
     token = localStorage.getItem(LOCALSTORAGE_TOKEN)
+    console.log(token)
   }
+  console.log(req.cookies)
+
   if (
     !req.nextUrl.pathname.startsWith('/login') &&
     !req.nextUrl.pathname.startsWith('/account')

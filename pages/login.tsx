@@ -10,7 +10,11 @@ import { useForm } from '@mantine/form'
 import { NextLink } from '@mantine/next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { LOCALSTORAGE_TOKEN } from '../constants'
 import { useAuthStyles } from '../lib/client/styles/authStyles'
+import { useLoginMutation } from '../lib/graphql/__generated__'
+import { authTokenVar, isLoggedInVar } from '../lib/server/apolloClient'
 
 interface LoginFormValues {
   email: string
@@ -20,14 +24,49 @@ interface LoginFormValues {
 const Login = () => {
   const { classes } = useAuthStyles({})
   const router = useRouter()
-  console.log(router.query)
-  const form = useForm<LoginFormValues>({
-    initialValues: {
-      email: 'EMAIL',
-      password: '',
+  const [loginError, setLoginError] = useState('')
+  const [login, { data, loading, error }] = useLoginMutation({
+    onCompleted(result) {
+      if (result.login.ok && result.login.token) {
+        localStorage.setItem(LOCALSTORAGE_TOKEN, result.login.token)
+        authTokenVar(result.login.token)
+        isLoggedInVar(true)
+      }
+      if (result.login.error) {
+        setLoginError(result.login.error)
+      }
     },
   })
-  const onValid = (data: LoginFormValues) => {}
+  const form = useForm<LoginFormValues>({
+    initialValues: {
+      email: (router.query.email as string) || '',
+      password: '',
+    },
+    validate: {
+      email: (value) => {
+        if (
+          !/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i.test(
+            value,
+          )
+        )
+          return '이메일 형식이 맞지 않습니다.'
+      },
+      password: (value) =>
+        value.length < 4 ? '비밀번호는 최소 4자 이상이여야 합니다.' : null,
+    },
+    validateInputOnChange: true,
+  })
+  const onValid = ({ email, password }: LoginFormValues) => {
+    if (loading) return
+    login({
+      variables: {
+        input: {
+          email,
+          password,
+        },
+      },
+    })
+  }
   return (
     <>
       <Head>
@@ -75,7 +114,10 @@ const Login = () => {
               회원가입
             </Text>
           </Text>
-          <Button type='submit'>Submit</Button>
+          <Text className={classes.error}>{loginError}</Text>
+          <Button type='submit' disabled={loading}>
+            {loading ? 'Loading...' : 'Log In'}
+          </Button>
         </Paper>
       </div>
     </>

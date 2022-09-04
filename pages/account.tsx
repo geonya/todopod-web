@@ -10,6 +10,7 @@ import {
   Menu,
   Paper,
   PasswordInput,
+  Text,
   TextInput,
   Title,
   UnstyledButton,
@@ -19,6 +20,7 @@ import { IconChevronDown, IconUser } from '@tabler/icons'
 import { useForm } from '@mantine/form'
 import { useRouter } from 'next/router'
 import { useAuthStyles } from '../lib/client/styles/authStyles'
+import { NextLink } from '@mantine/next'
 
 interface AccountFormValues {
   name: string
@@ -161,6 +163,18 @@ const Account: NextPage = () => {
             </Menu.Target>
             <Menu.Dropdown>{roles}</Menu.Dropdown>
           </Menu>
+          <Text>
+            아이디가 있다면{' '}
+            <Text
+              component={NextLink}
+              href='/login'
+              sx={(theme) => ({
+                color: theme.colors.blue[5],
+              })}
+            >
+              로그인
+            </Text>
+          </Text>
           <Button type='submit'>Submit</Button>
         </Paper>
       </div>

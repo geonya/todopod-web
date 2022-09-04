@@ -12,8 +12,8 @@ _220822_
 - [x] Query Test
 - [x] setup MantineUI
 - [x] Next Middleware
-- [ ] Mantine Form
+- [x] Mantine Form
 - [ ] Create Account Page
 - [ ] Login Page
-- [ ] Token Setup
+- [ ] Session Cookie Setup
 - [ ] Login Page

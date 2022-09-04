@@ -4,7 +4,7 @@ import { addApolloState, initializeApollo } from '../lib/server/apolloClient'
 import { GET_PROJECTS_QUERY } from '../lib/graphql/schema'
 
 const Home: NextPage = () => {
-  return <div></div>
+  return <div>This is Home!</div>
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {

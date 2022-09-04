@@ -21,6 +21,14 @@ gql`
       error
     }
   }
+
+  mutation Login($input: LoginInput!) {
+    login(input: $input) {
+      ok
+      error
+      token
+    }
+  }
 `
 
 export const GET_PROJECTS_QUERY = gql`

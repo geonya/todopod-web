@@ -15,20 +15,23 @@ import { onError } from '@apollo/client/link/error'
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
 let token: string | null = null
-
 if (typeof window !== 'undefined') {
   token = localStorage.getItem(LOCALSTORAGE_TOKEN)
 }
-export const isLoggedInVar = makeVar(Boolean(token))
 export const authTokenVar = makeVar(token)
+export const isLoggedInVar = makeVar(Boolean(token))
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4000/graphql',
+  credentials: 'include',
 })
+
 const authLink = new ApolloLink((operation, forward) => {
-  operation.setContext(({ headers }: { headers: any }) => ({
-    headers: { 'jwt-token': authTokenVar() || '', ...headers },
-  }))
+  operation.setContext(
+    ({ headers, cookies }: { headers: any; cookies: any }) => ({
+      headers: { 'jwt-token': authTokenVar() || '', ...headers },
+    }),
+  )
   return forward(operation)
 })
 const errorLink = onError(({ graphQLErrors, networkError }) => {

@@ -58,5 +58,12 @@ export const useAuthStyles = createStyles(
       transition: 'transform 150ms ease',
       transform: opened ? 'rotate(180deg)' : 'rotate(0deg',
     },
+    error: {
+      wordBreak: 'break-word',
+      color: theme.fn.variant({ variant: 'filled', color: 'red' }).background,
+      fontSize: theme.fontSizes.sm,
+      lineHeight: 1.2,
+      display: 'block',
+    },
   }),
 )
