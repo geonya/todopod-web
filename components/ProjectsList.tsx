@@ -1,28 +1,15 @@
 import { NetworkStatus } from '@apollo/client'
-import {
-  Badge,
-  Button,
-  ButtonProps,
-  Center,
-  Code,
-  createStyles,
-  Group,
-  Switch,
-  SwitchProps,
-  Text,
-  Title,
-} from '@mantine/core'
-import { useGetProjectsQuery } from '../lib/graphql/__generated__'
-import { NextLink } from '@mantine/next'
 
-export const getProjectsQueryVariables = {
-  getProjectsInput: { page: 1 },
-}
+import { useGetProjectsQuery } from '../lib/graphql/__generated__'
 
 export default function ProjectsList() {
   const { loading, error, data, fetchMore, networkStatus } =
     useGetProjectsQuery({
-      variables: getProjectsQueryVariables,
+      variables: {
+        input: {
+          page: 1,
+        },
+      },
     })
   const loadingMoreProjects = networkStatus === NetworkStatus.fetchMore
   const projects = data?.getProjects.projects

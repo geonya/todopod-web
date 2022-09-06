@@ -5,9 +5,6 @@ export const PROJECT_FRAGMENT = gql`
     id
     title
     description
-    creator {
-      name
-    }
     tasks {
       name
     }
@@ -28,6 +25,10 @@ gql`
       error
       token
     }
+  }
+
+  mutation Logout {
+    logout
   }
 `
 

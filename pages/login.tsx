@@ -11,10 +11,8 @@ import { NextLink } from '@mantine/next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { LOCALSTORAGE_TOKEN } from '../constants'
 import { useAuthStyles } from '../lib/client/styles/authStyles'
 import { useLoginMutation } from '../lib/graphql/__generated__'
-import { authTokenVar, isLoggedInVar } from '../lib/server/apolloClient'
 
 interface LoginFormValues {
   email: string
@@ -28,9 +26,7 @@ const Login = () => {
   const [login, { data, loading, error }] = useLoginMutation({
     onCompleted(result) {
       if (result.login.ok && result.login.token) {
-        localStorage.setItem(LOCALSTORAGE_TOKEN, result.login.token)
-        authTokenVar(result.login.token)
-        isLoggedInVar(true)
+        router.push('/')
       }
       if (result.login.error) {
         setLoginError(result.login.error)

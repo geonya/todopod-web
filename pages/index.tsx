@@ -1,21 +1,33 @@
-import type { GetServerSideProps, NextPage } from 'next'
-import { getProjectsQueryVariables } from '../components/ProjectsList'
-import { addApolloState, initializeApollo } from '../lib/server/apolloClient'
-import { GET_PROJECTS_QUERY } from '../lib/graphql/schema'
+import { Button } from '@mantine/core'
+import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
+import ProjectsList from '../components/ProjectsList'
+import { useLogoutMutation } from '../lib/graphql/__generated__'
 
-const Home: NextPage = () => {
-  return <div>This is Home!</div>
-}
+interface Props {}
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const apolloClient = initializeApollo()
-  await apolloClient.query({
-    query: GET_PROJECTS_QUERY,
-    variables: getProjectsQueryVariables,
+const Home: NextPage<Props> = () => {
+  const router = useRouter()
+  const [logout, { loading, data }] = useLogoutMutation({
+    onCompleted: (result) => {
+      if (result.logout) {
+        router.push('/login')
+      }
+    },
   })
-  return addApolloState(apolloClient, {
-    props: {},
-  })
+  return (
+    <div>
+      <h1>This is Home!</h1>
+      <Button
+        onClick={() => {
+          logout()
+        }}
+      >
+        Log out
+      </Button>
+      <ProjectsList />
+    </div>
+  )
 }
 
 export default Home

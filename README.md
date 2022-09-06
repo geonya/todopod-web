@@ -13,7 +13,7 @@ _220822_
 - [x] setup MantineUI
 - [x] Next Middleware
 - [x] Mantine Form
+- [ ] Session Cookie Setup
 - [ ] Create Account Page
 - [ ] Login Page
-- [ ] Session Cookie Setup
 - [ ] Login Page

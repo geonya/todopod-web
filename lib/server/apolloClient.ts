@@ -4,51 +4,49 @@ import {
   from,
   HttpLink,
   InMemoryCache,
-  makeVar,
   NormalizedCacheObject,
 } from '@apollo/client'
-import { APOLLO_STATE_PROP_NAME, LOCALSTORAGE_TOKEN } from '../../constants'
+import { APOLLO_STATE_PROP_NAME } from '../../constants'
 import merge from 'deepmerge'
 import { isEqual } from 'lodash'
 import { useMemo } from 'react'
 import { onError } from '@apollo/client/link/error'
+import { NextPageContext } from 'next'
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
-let token: string | null = null
-if (typeof window !== 'undefined') {
-  token = localStorage.getItem(LOCALSTORAGE_TOKEN)
-}
-export const authTokenVar = makeVar(token)
-export const isLoggedInVar = makeVar(Boolean(token))
 
-const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql',
-  credentials: 'include',
-})
+const isBrowser = typeof window !== 'undefined'
 
-const authLink = new ApolloLink((operation, forward) => {
-  operation.setContext(
-    ({ headers, cookies }: { headers: any; cookies: any }) => ({
-      headers: { 'jwt-token': authTokenVar() || '', ...headers },
-    }),
-  )
-  return forward(operation)
-})
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ),
-    )
-  if (networkError) console.log(`[Network error]: ${networkError}`)
-})
+function createApolloClient(ctx: NextPageContext | null) {
+  const httpLink = new HttpLink({
+    uri: 'http://localhost:4000/graphql',
+    credentials: 'include',
+  })
 
-const additiveLink = from([authLink, errorLink, httpLink])
+  const authLink = new ApolloLink((operation, forward) => {
+    operation.setContext(({ headers }: { headers: any }) => {
+      return {
+        headers: {
+          ...headers,
+        },
+      }
+    })
+    return forward(operation)
+  })
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+      graphQLErrors.forEach(({ message, locations, path }) =>
+        console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+        ),
+      )
+    if (networkError) console.log(`[Network error]: ${networkError}`)
+  })
 
-function createApolloClient() {
+  const additiveLink = from([authLink, errorLink, httpLink])
+
   return new ApolloClient({
-    ssrMode: typeof window === 'undefined',
+    ssrMode: !isBrowser,
     link: additiveLink,
     cache: new InMemoryCache({
       typePolicies: {
@@ -62,7 +60,7 @@ function createApolloClient() {
 
 export function initializeApollo(initialState = null) {
   const _apolloClient: ApolloClient<NormalizedCacheObject> =
-    apolloClient ?? createApolloClient()
+    apolloClient ?? createApolloClient(initialState)
   if (initialState) {
     const existingCache = _apolloClient.extract()
     const data = merge(existingCache, initialState, {
@@ -76,7 +74,7 @@ export function initializeApollo(initialState = null) {
     _apolloClient.cache.restore(data)
   }
 
-  if (typeof window === 'undefined') return _apolloClient
+  if (!isBrowser) return _apolloClient
   if (!apolloClient) apolloClient = _apolloClient
 
   return _apolloClient
