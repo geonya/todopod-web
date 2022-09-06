@@ -21,7 +21,13 @@ const Home: NextPage<Props> = () => {
       }
     },
   })
-  const { data } = useGetMyProfileQuery()
+  const { data } = useGetMyProfileQuery({
+    onCompleted(data) {
+      if (!data.getMyProfile.ok || !data.getMyProfile.user) {
+        router.push('/login')
+      }
+    },
+  })
 
   return (
     <div>
