@@ -357,6 +357,12 @@ export type LoginOutput = {
   token?: Maybe<Scalars['String']>;
 };
 
+export type LogoutOutput = {
+  __typename?: 'LogoutOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createAccount: CreateAccountOutput;
@@ -379,7 +385,7 @@ export type Mutation = {
   editTodo: EditTodoOutput;
   joinTeam: CreateTeamOutput;
   login: LoginOutput;
-  logout: Scalars['Boolean'];
+  logout: LogoutOutput;
   verifyEmail: VerifyEmailOutput;
 };
 
@@ -750,7 +756,7 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Lo
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
+export type LogoutMutation = { __typename?: 'Mutation', logout: { __typename?: 'LogoutOutput', ok: boolean, error?: string | null } };
 
 export type GetProjectsQueryVariables = Exact<{
   input: GetProjectsInput;
@@ -758,6 +764,11 @@ export type GetProjectsQueryVariables = Exact<{
 
 
 export type GetProjectsQuery = { __typename?: 'Query', getProjects: { __typename?: 'GetProjectsOutput', ok: boolean, error?: string | null, totalProjectsCount?: number | null, totalPages?: number | null, projects?: Array<{ __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', name: string }> | null }> | null } };
+
+export type GetMyProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyProfileQuery = { __typename?: 'Query', getMyProfile: { __typename?: 'MyProfileOutput', ok: boolean, error?: string | null, user: { __typename?: 'User', name: string } } };
 
 export const ProjectFragmentFragmentDoc = gql`
     fragment ProjectFragment on Project {
@@ -840,7 +851,10 @@ export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const LogoutDocument = gql`
     mutation Logout {
-  logout
+  logout {
+    ok
+    error
+  }
 }
     `;
 export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
@@ -909,3 +923,41 @@ export function useGetProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
 export type GetProjectsQueryResult = Apollo.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
+export const GetMyProfileDocument = gql`
+    query GetMyProfile {
+  getMyProfile {
+    ok
+    error
+    user {
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetMyProfileQuery__
+ *
+ * To run a query within a React component, call `useGetMyProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyProfileQuery(baseOptions?: Apollo.QueryHookOptions<GetMyProfileQuery, GetMyProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyProfileQuery, GetMyProfileQueryVariables>(GetMyProfileDocument, options);
+      }
+export function useGetMyProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyProfileQuery, GetMyProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyProfileQuery, GetMyProfileQueryVariables>(GetMyProfileDocument, options);
+        }
+export type GetMyProfileQueryHookResult = ReturnType<typeof useGetMyProfileQuery>;
+export type GetMyProfileLazyQueryHookResult = ReturnType<typeof useGetMyProfileLazyQuery>;
+export type GetMyProfileQueryResult = Apollo.QueryResult<GetMyProfileQuery, GetMyProfileQueryVariables>;

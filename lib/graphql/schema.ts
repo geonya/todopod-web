@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export const PROJECT_FRAGMENT = gql`
+const PROJECT_FRAGMENT = gql`
   fragment ProjectFragment on Project {
     id
     title
@@ -28,12 +28,15 @@ gql`
   }
 
   mutation Logout {
-    logout
+    logout {
+      ok
+      error
+    }
   }
 `
 
-export const GET_PROJECTS_QUERY = gql`
-  query GetProjects($input: GetProjectsInput!) {
+gql`
+ query GetProjects($input: GetProjectsInput!) {
     getProjects(input: $input) {
       ok
       error
@@ -44,5 +47,15 @@ export const GET_PROJECTS_QUERY = gql`
       totalPages
     }
     ${PROJECT_FRAGMENT}
+  } 
+
+  query GetMyProfile {
+    getMyProfile {
+      ok
+      error
+      user {
+        name
+      }
+    }
   }
 `
