@@ -7,11 +7,11 @@ import Head from 'next/head'
 import Layout from '../components/Layout'
 import { GetServerSideProps } from 'next'
 import { JWT_TOKEN } from '../constants'
-import { useEffect, useLayoutEffect } from 'react'
-import { isLoggedInVar } from '../lib/client/apolloVars'
+import useIsLoggedIn from '../hooks/useIsLoggedIn'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps)
+  useIsLoggedIn(pageProps.token)
   return (
     <>
       <Head>
@@ -36,6 +36,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       </ApolloProvider>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = ctx.req.cookies[JWT_TOKEN]
+  return {
+    props: {
+      token,
+    },
+  }
 }
 
 export default MyApp

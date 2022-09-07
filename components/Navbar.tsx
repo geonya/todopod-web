@@ -10,6 +10,7 @@ import {
   Tooltip,
   UnstyledButton,
 } from '@mantine/core'
+import { NextLink } from '@mantine/next'
 import {
   IconBulb,
   IconCheckbox,
@@ -145,7 +146,12 @@ export default function NavbarSearch() {
   })
 
   const mainLinks = links.map((link, i) => (
-    <UnstyledButton key={i} className={classes.mainLink}>
+    <UnstyledButton
+      key={i}
+      className={classes.mainLink}
+      component={NextLink}
+      href={'/projects'}
+    >
       <div className={classes.mainLinkInner}>
         <link.icon size={20} className={classes.mainLinkIcon} />
         <span>{link.label}</span>
