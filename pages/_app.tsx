@@ -4,6 +4,11 @@ import { ApolloProvider } from '@apollo/client'
 import { useApollo } from '../lib/server/apolloClient'
 import { MantineProvider } from '@mantine/core'
 import Head from 'next/head'
+import Layout from '../components/Layout'
+import { GetServerSideProps } from 'next'
+import { JWT_TOKEN } from '../constants'
+import { useEffect, useLayoutEffect } from 'react'
+import { isLoggedInVar } from '../lib/client/apolloVars'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps)
@@ -21,10 +26,12 @@ function MyApp({ Component, pageProps }: AppProps) {
           withGlobalStyles
           withNormalizeCSS
           theme={{
-            colorScheme: 'light',
+            colorScheme: 'dark',
           }}
         >
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </MantineProvider>
       </ApolloProvider>
     </>

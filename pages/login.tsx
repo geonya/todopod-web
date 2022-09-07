@@ -11,6 +11,7 @@ import { NextLink } from '@mantine/next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { isLoggedInVar } from '../lib/client/apolloVars'
 import { useAuthStyles } from '../lib/client/styles/authStyles'
 import { useLoginMutation } from '../lib/graphql/__generated__'
 
@@ -20,12 +21,13 @@ interface LoginFormValues {
 }
 
 const Login = () => {
-  const { classes } = useAuthStyles({})
   const router = useRouter()
+  const { classes } = useAuthStyles({})
   const [loginError, setLoginError] = useState('')
-  const [login, { data, loading, error }] = useLoginMutation({
+  const [login, { loading }] = useLoginMutation({
     onCompleted(result) {
       if (result.login.ok && result.login.token) {
+        isLoggedInVar(true)
         router.push('/')
       }
       if (result.login.error) {

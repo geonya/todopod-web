@@ -768,7 +768,7 @@ export type GetProjectsQuery = { __typename?: 'Query', getProjects: { __typename
 export type GetMyProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMyProfileQuery = { __typename?: 'Query', getMyProfile: { __typename?: 'MyProfileOutput', ok: boolean, error?: string | null, user: { __typename?: 'User', name: string } } };
+export type GetMyProfileQuery = { __typename?: 'Query', getMyProfile: { __typename?: 'MyProfileOutput', ok: boolean, error?: string | null, user: { __typename?: 'User', name: string, role: UserRole, email: string } } };
 
 export const ProjectFragmentFragmentDoc = gql`
     fragment ProjectFragment on Project {
@@ -930,6 +930,8 @@ export const GetMyProfileDocument = gql`
     error
     user {
       name
+      role
+      email
     }
   }
 }

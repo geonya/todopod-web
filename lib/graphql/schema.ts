@@ -55,6 +55,8 @@ gql`
       error
       user {
         name
+        role
+        email
       }
     }
   }

@@ -32,6 +32,7 @@ interface AccountFormValues {
 const Account: NextPage = () => {
   const router = useRouter()
   const [opened, setOpened] = useState(false)
+  const [accountError, setAccountError] = useState('')
   const { classes } = useAuthStyles({ opened })
   const [selected, setSelected] = useState(UserRole['Client'])
   const form = useForm<AccountFormValues>({
@@ -79,13 +80,16 @@ const Account: NextPage = () => {
     useCreateAccountMutation({
       onCompleted: (result) => {
         const {
-          createAccount: { ok },
+          createAccount: { ok, error },
         } = result
         if (ok) {
           router.push({
             pathname: '/login',
             query: { email: form.values.email },
           })
+        }
+        if (error) {
+          setAccountError(error)
         }
       },
     })
@@ -175,6 +179,7 @@ const Account: NextPage = () => {
               로그인
             </Text>
           </Text>
+          <Text className={classes.error}>{accountError}</Text>
           <Button type='submit'>Submit</Button>
         </Paper>
       </div>

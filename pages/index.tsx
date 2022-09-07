@@ -1,44 +1,35 @@
-import { Button, Text } from '@mantine/core'
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
+import { Text } from '@mantine/core'
+import type { GetServerSideProps, NextPage } from 'next'
+import { useEffect } from 'react'
 import ProjectsList from '../components/ProjectsList'
-import {
-  useGetMyProfileQuery,
-  useLogoutMutation,
-} from '../lib/graphql/__generated__'
+import { JWT_TOKEN } from '../constants'
+import { isLoggedInVar } from '../lib/client/apolloVars'
 
-interface Props {}
+interface HomeProps {
+  token?: string
+}
 
-const Home: NextPage<Props> = () => {
-  const router = useRouter()
-  const [logout, { loading }] = useLogoutMutation({
-    onCompleted: (result) => {
-      if (result.logout.ok) {
-        router.push('/login')
-      }
-      if (result.logout.error) {
-        alert(result.logout.error)
-      }
-    },
-  })
-  const { data } = useGetMyProfileQuery({
-    onCompleted(data) {
-      if (!data.getMyProfile.ok || !data.getMyProfile.user) {
-        router.push('/login')
-      }
-    },
-  })
-
+const Home: NextPage<HomeProps> = ({ token }) => {
+  useEffect(() => {
+    if (token) {
+      isLoggedInVar(true)
+    }
+  }, [token])
   return (
     <div>
       <h1>This is Home!</h1>
-      <Button onClick={() => logout()} disabled={loading}>
-        Log out
-      </Button>
-      <Text>Username : {data?.getMyProfile.user.name}</Text>
       <ProjectsList />
     </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = ctx.req.cookies[JWT_TOKEN]
+  return {
+    props: {
+      token,
+    },
+  }
 }
 
 export default Home
