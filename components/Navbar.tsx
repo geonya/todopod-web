@@ -1,6 +1,8 @@
 import {
   ActionIcon,
   Badge,
+  Box,
+  Center,
   Code,
   createStyles,
   Group,
@@ -27,19 +29,19 @@ import useIsDark from '../hooks/useIsDark'
 import useUser from '../hooks/useUser'
 import { isLoggedInVar } from '../lib/client/apolloVars'
 import { useLogoutMutation } from '../lib/graphql/__generated__'
+import ThemeToggle from './ThemeToggle'
 import UserButton from './UserButton'
 
 const useStyles = createStyles((theme) => ({
   navbar: {},
   section: {
-    marginBottom: theme.spacing.md,
+    padding: '5px 0',
     '&:not(:last-of-type)': {
       borderBottom: `1px solid ${
         useIsDark() ? theme.colors.dark[4] : theme.colors.gray[3]
       }`,
     },
   },
-
   searchCode: {
     fontWeight: 700,
     fontSize: 10,
@@ -112,21 +114,19 @@ const useStyles = createStyles((theme) => ({
 }))
 
 const links = [
-  { icon: IconBulb, label: 'Projects', notifications: 3 },
-  { icon: IconCheckbox, label: 'Tasks', notifications: 4 },
-  { icon: IconUser, label: 'Contacts' },
+  { icon: IconBulb, label: 'Project', notifications: 3 },
+  { icon: IconCheckbox, label: 'Todo', notifications: 4 },
+  { icon: IconUser, label: 'Team' },
 ]
 
 const collections = [
-  { emoji: '👍', label: 'Sales' },
-  { emoji: '🚚', label: 'Deliveries' },
-  { emoji: '💸', label: 'Discounts' },
-  { emoji: '💰', label: 'Profits' },
-  { emoji: '✨', label: 'Reports' },
-  { emoji: '🛒', label: 'Orders' },
-  { emoji: '📅', label: 'Events' },
-  { emoji: '🙈', label: 'Debts' },
-  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '👍', label: '간판' },
+  { emoji: '🚚', label: '브랜딩' },
+  { emoji: '💸', label: '웹개발' },
+  { emoji: '💰', label: '제작' },
+  { emoji: '✨', label: '영업' },
+  { emoji: '🛒', label: '견적 요청' },
+  { emoji: '📅', label: '일정' },
 ]
 
 export default function NavbarSearch() {
@@ -175,6 +175,12 @@ export default function NavbarSearch() {
   return (
     <Navbar width={{ sm: 250 }} className={classes.navbar}>
       <Navbar.Section className={classes.section}>
+        <Center py={10}>
+          <IconCheckbox size={18} />
+          <Text>Todopod</Text>
+        </Center>
+      </Navbar.Section>
+      <Navbar.Section className={classes.section}>
         <UserButton
           image='https://i.imgur.com/fGxgcDF.png'
           name={data?.getMyProfile.user.name || 'user'}
@@ -189,7 +195,7 @@ export default function NavbarSearch() {
         rightSectionWidth={70}
         rightSection={<Code className={classes.searchCode}>Ctrl + K</Code>}
         styles={{ rightSection: { pointerEvents: 'none' } }}
-        mb='sm'
+        my='md'
       />
       <Navbar.Section className={classes.section}>
         <div className={classes.mainLinks}>{mainLinks}</div>
@@ -225,6 +231,9 @@ export default function NavbarSearch() {
           </div>
         </UnstyledButton>
       </Navbar.Section>
+      <Box sx={{ position: 'absolute', bottom: 10, right: 0, left: 0 }}>
+        <ThemeToggle />
+      </Box>
     </Navbar>
   )
 }
