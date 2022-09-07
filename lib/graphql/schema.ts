@@ -33,6 +33,13 @@ gql`
       error
     }
   }
+
+  mutation CreateTask($input: CreateTaskInput!) {
+    createTask(input: $input) {
+      ok
+      error
+    }
+  }
 `
 
 gql`
@@ -47,7 +54,17 @@ gql`
       totalPages
     }
     ${PROJECT_FRAGMENT}
-  } 
+  }
+  query GetProject($input:GetProjectInput!) {
+    getProject(input:$input) {
+      ok
+      error
+      project {
+        ...ProjectFragment
+      }
+    }
+    ${PROJECT_FRAGMENT}
+  }
 
   query GetMyProfile {
     getMyProfile {

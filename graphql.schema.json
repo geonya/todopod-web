@@ -488,7 +488,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CreateTaskInputType",
+        "name": "CreateTaskInput",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -1942,7 +1942,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "GetProjectInputType",
+        "name": "GetProjectInput",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -2872,7 +2872,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "CreateTaskInputType",
+                    "name": "CreateTaskInput",
                     "ofType": null
                   }
                 },
@@ -4214,7 +4214,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "GetProjectInputType",
+                    "name": "GetProjectInput",
                     "ofType": null
                   }
                 },

@@ -232,7 +232,7 @@ export default function NavbarSearch() {
           </div>
         </UnstyledButton>
       </Navbar.Section>
-      <Box sx={{ position: 'absolute', bottom: 10, right: 0, left: 0 }}>
+      <Box mt={20}>
         <ThemeToggle />
       </Box>
     </Navbar>

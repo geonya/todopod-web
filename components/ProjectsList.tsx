@@ -36,6 +36,7 @@ export default function ProjectsList() {
         {projects?.map((project, i) => (
           <Grid.Col span={3} key={i}>
             <Project
+              id={project.id}
               image={
                 'https://img.freepik.com/free-photo/businessmen-businesswomen-meeting-brainstorming-ideas_7861-3065.jpg?w=996&t=st=1662533026~exp=1662533626~hmac=f8234c09f36abf7e2901466d036e3f3af30b62248d2c1036b5b04ca58b079c36'
               }

@@ -8,6 +8,7 @@ import {
   Image,
   Text,
 } from '@mantine/core'
+import { NextLink } from '@mantine/next'
 import { IconStar, IconTag } from '@tabler/icons'
 import useIsDark from '../hooks/useIsDark'
 
@@ -33,6 +34,7 @@ const useStyles = createStyles((theme) => ({
 }))
 
 interface ProjectProps {
+  id: number
   image: string
   title: string
   description: string
@@ -40,6 +42,7 @@ interface ProjectProps {
 }
 
 export default function Project({
+  id,
   image,
   title,
   description,
@@ -74,8 +77,13 @@ export default function Project({
         <Group spacing={7}>{tagList}</Group>
       </Card.Section>
       <Group mt='xs'>
-        <Button radius='md' style={{ flex: 1 }}>
-          Show Tasks
+        <Button
+          radius='md'
+          style={{ flex: 1 }}
+          component={NextLink}
+          href={`/projects/${id}`}
+        >
+          자세히 보기
         </Button>
         <ActionIcon variant='default' radius='md' size={36}>
           <IconStar size={18} className={classes.star} stroke={1.5} />

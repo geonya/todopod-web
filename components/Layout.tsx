@@ -1,4 +1,4 @@
-import { AppShell } from '@mantine/core'
+import { AppShell, Container } from '@mantine/core'
 import Head from 'next/head'
 import React from 'react'
 import metaData from '../data/metaData'
@@ -22,11 +22,6 @@ export default function Layout({
         },
       })}
     >
-      <Head>
-        <title>
-          {title} | {metaData.siteTitle}
-        </title>
-      </Head>
       {children}
     </AppShell>
   )
