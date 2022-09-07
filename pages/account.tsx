@@ -21,6 +21,7 @@ import { useForm } from '@mantine/form'
 import { useRouter } from 'next/router'
 import { useAuthStyles } from '../lib/client/styles/authStyles'
 import { NextLink } from '@mantine/next'
+import AuthLayout from '../components/AuthLayout'
 
 interface AccountFormValues {
   name: string
@@ -105,10 +106,7 @@ const Account: NextPage = () => {
     })
   }
   return (
-    <>
-      <Head>
-        <title>Account | Todopod</title>
-      </Head>
+    <AuthLayout title='Account'>
       <div className={classes.wrapper}>
         <Paper
           component='form'
@@ -183,7 +181,7 @@ const Account: NextPage = () => {
           <Button type='submit'>Submit</Button>
         </Paper>
       </div>
-    </>
+    </AuthLayout>
   )
 }
 

@@ -4,6 +4,7 @@ import { IconPencil } from '@tabler/icons'
 import useIsDark from '../hooks/useIsDark'
 
 import { useGetProjectsQuery } from '../lib/graphql/__generated__'
+import Layout from './Layout'
 import Project from './Project'
 
 export default function ProjectsList() {
@@ -30,7 +31,7 @@ export default function ProjectsList() {
   if (loading && !loadingMoreProjects) return <div>Loading...</div>
 
   return (
-    <Container fluid>
+    <Layout title='Projects'>
       <Grid>
         {projects?.map((project, i) => (
           <Grid.Col span={3} key={i}>
@@ -58,6 +59,6 @@ export default function ProjectsList() {
       >
         <IconPencil size={60} />
       </UnstyledButton>
-    </Container>
+    </Layout>
   )
 }

@@ -25,8 +25,9 @@ import {
 } from '@tabler/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import metaData from '../data/metaData'
 import useIsDark from '../hooks/useIsDark'
-import useUser from '../hooks/useUser'
+import useMe from '../hooks/useMe'
 import { isLoggedInVar } from '../lib/client/apolloVars'
 import { useLogoutMutation } from '../lib/graphql/__generated__'
 import ThemeToggle from './ThemeToggle'
@@ -131,7 +132,7 @@ const collections = [
 
 export default function NavbarSearch() {
   const { classes } = useStyles()
-  const { data } = useUser()
+  const { data } = useMe()
   const router = useRouter()
   const [logout, { loading }] = useLogoutMutation({
     onCompleted: (result) => {
@@ -177,7 +178,7 @@ export default function NavbarSearch() {
       <Navbar.Section className={classes.section}>
         <Center py={10}>
           <IconCheckbox size={18} />
-          <Text>Todopod</Text>
+          <Text>{metaData.siteTitle}</Text>
         </Center>
       </Navbar.Section>
       <Navbar.Section className={classes.section}>

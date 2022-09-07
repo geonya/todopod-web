@@ -11,6 +11,7 @@ import { NextLink } from '@mantine/next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import AuthLayout from '../components/AuthLayout'
 import { isLoggedInVar } from '../lib/client/apolloVars'
 import { useAuthStyles } from '../lib/client/styles/authStyles'
 import { useLoginMutation } from '../lib/graphql/__generated__'
@@ -66,10 +67,7 @@ const Login = () => {
     })
   }
   return (
-    <>
-      <Head>
-        <title>Log In | Todopod</title>
-      </Head>
+    <AuthLayout title='Log In'>
       <div className={classes.wrapper}>
         <Paper
           component='form'
@@ -118,7 +116,7 @@ const Login = () => {
           </Button>
         </Paper>
       </div>
-    </>
+    </AuthLayout>
   )
 }
 

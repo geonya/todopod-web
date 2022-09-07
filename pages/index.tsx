@@ -1,17 +1,13 @@
-import type { GetServerSideProps, NextPage } from 'next'
-import { useEffect } from 'react'
-import { JWT_TOKEN } from '../constants'
-import { isLoggedInVar } from '../lib/client/apolloVars'
+import type { NextPage } from 'next'
+import Layout from '../components/Layout'
 
-interface HomeProps {
-  token?: string
-}
+interface HomeProps {}
 
-const Home: NextPage<HomeProps> = ({ token }) => {
+const Home: NextPage<HomeProps> = () => {
   return (
-    <div>
+    <Layout title='Home'>
       <h1>This is Home!</h1>
-    </div>
+    </Layout>
   )
 }
 
