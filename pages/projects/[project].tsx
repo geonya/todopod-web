@@ -1,4 +1,4 @@
-import { Button, Loader, Text } from '@mantine/core'
+import { Button, Loader, Text, Title } from '@mantine/core'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Layout from '../../components/Layout'
@@ -22,9 +22,9 @@ export default function ProjectPage() {
   }))
   const [
     createTask,
-    { data: TaskData, loading: TaskLoading, error: TaskError },
+    { data: taskData, loading: TaskLoading, error: TaskError },
   ] = useCreateTaskMutation()
-  console.log(TaskData)
+
   const createTaskFn = (projectId: number) => {
     createTask({
       variables: {
@@ -51,13 +51,15 @@ export default function ProjectPage() {
   if (!data || loading) {
     return (
       <Layout>
+        Loading
         <Loader />
       </Layout>
     )
   }
-  if (!data.getProject.ok) {
+  if (!data.getProject.ok || data.getProject.error) {
     return (
       <Layout>
+        Error
         <Text>{data.getProject.error}</Text>
       </Layout>
     )
@@ -65,7 +67,7 @@ export default function ProjectPage() {
 
   return (
     <Layout title={data.getProject.project?.title}>
-      {data.getProject.project?.title}
+      <Title>{data.getProject.project?.title}</Title>
       <TaskLisk data={taskListData} />
       <Button
         onClick={() =>

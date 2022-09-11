@@ -40,6 +40,12 @@ gql`
       error
     }
   }
+  mutation CreateProject($input: CreateProjectInput!) {
+    createProject(input: $input) {
+      ok
+      error
+    }
+  }
 `
 
 gql`

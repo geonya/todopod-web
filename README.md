@@ -19,5 +19,7 @@ _220822_
 - [x] App Shell
 - [x] Navbar
 - [x] Theme Toggle
-- [ ] Project Card List
+- [x] Project Card List
 - [ ] Create Project
+- [ ] Task List
+- [ ] Create Task

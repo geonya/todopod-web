@@ -50,6 +50,7 @@ export default function Project({
 }: ProjectProps) {
   const { classes } = useStyles()
   const isDark = useIsDark()
+
   const tagList = tags.map((tag, i) => (
     <Badge
       key={i}

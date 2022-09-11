@@ -1,14 +1,14 @@
 import { NetworkStatus } from '@apollo/client'
-import { Container, Grid, UnstyledButton } from '@mantine/core'
+import { Grid, Modal, UnstyledButton } from '@mantine/core'
 import { IconPencil } from '@tabler/icons'
-import useIsDark from '../hooks/useIsDark'
-
+import { useState } from 'react'
 import { useGetProjectsQuery } from '../lib/graphql/__generated__'
+import CraeteProject from './CreateProject'
 import Layout from './Layout'
 import Project from './Project'
 
 export default function ProjectsList() {
-  const isDark = useIsDark()
+  const [opened, setOpened] = useState(false)
   const { loading, error, data, fetchMore, networkStatus } =
     useGetProjectsQuery({
       variables: {
@@ -31,7 +31,7 @@ export default function ProjectsList() {
   if (loading && !loadingMoreProjects) return <div>Loading...</div>
 
   return (
-    <Layout title='Projects'>
+    <>
       <Grid>
         {projects?.map((project, i) => (
           <Grid.Col span={3} key={i}>
@@ -52,14 +52,25 @@ export default function ProjectsList() {
           position: 'fixed',
           right: 20,
           bottom: 50,
-          backgroundColor: isDark ? theme.colors.blue[5] : theme.colors.blue[8],
-          color: isDark ? theme.white : theme.black,
+          backgroundColor: theme.colors.blue[6],
+          color: theme.white,
           borderRadius: '50%',
-          padding: 5,
+          padding: 10,
+          ':hover': {
+            opacity: 0.5,
+          },
         })}
+        onClick={() => setOpened(true)}
       >
-        <IconPencil size={60} />
+        <IconPencil size={45} />
       </UnstyledButton>
-    </Layout>
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title='Create Project'
+      >
+        <CraeteProject />
+      </Modal>
+    </>
   )
 }

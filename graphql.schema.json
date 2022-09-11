@@ -390,7 +390,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CreateProjectInputType",
+        "name": "CreateProjectInput",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -2839,7 +2839,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "CreateProjectInputType",
+                    "name": "CreateProjectInput",
                     "ofType": null
                   }
                 },

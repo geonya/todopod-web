@@ -1,5 +1,10 @@
+import Layout from '../../components/Layout'
 import ProjectsList from '../../components/ProjectsList'
 
 export default function Projects() {
-  return <ProjectsList />
+  return (
+    <Layout title='Main'>
+      <ProjectsList />
+    </Layout>
+  )
 }
