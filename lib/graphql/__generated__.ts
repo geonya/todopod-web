@@ -165,7 +165,7 @@ export type DeleteTodoOutput = {
   ok: Scalars['Boolean'];
 };
 
-export type EditAccountInputType = {
+export type EditAccountInput = {
   address?: InputMaybe<Scalars['String']>;
   avatar?: InputMaybe<Scalars['String']>;
   company?: InputMaybe<Scalars['String']>;
@@ -386,6 +386,7 @@ export type Mutation = {
   joinTeam: CreateTeamOutput;
   login: LoginOutput;
   logout: LogoutOutput;
+  sendVerificationEmail: SendVerificationEmailOutput;
   verifyEmail: VerifyEmailOutput;
 };
 
@@ -452,7 +453,7 @@ export type MutationDeleteTodoArgs = {
 
 
 export type MutationEditAccountArgs = {
-  input: EditAccountInputType;
+  input: EditAccountInput;
 };
 
 
@@ -491,8 +492,13 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationSendVerificationEmailArgs = {
+  input: SendVerificationEmailInput;
+};
+
+
 export type MutationVerifyEmailArgs = {
-  input: VerifyEmailInputType;
+  input: VerifyEmailInput;
 };
 
 export type MyProfileOutput = {
@@ -605,6 +611,16 @@ export type QueryGetTodoArgs = {
 
 export type QueryGetTodosArgs = {
   input: GetTodosInputType;
+};
+
+export type SendVerificationEmailInput = {
+  email: Scalars['String'];
+};
+
+export type SendVerificationEmailOutput = {
+  __typename?: 'SendVerificationEmailOutput';
+  error?: Maybe<Scalars['String']>;
+  ok: Scalars['Boolean'];
 };
 
 export type Tag = {
@@ -727,7 +743,7 @@ export enum UserRole {
   Producer = 'Producer'
 }
 
-export type VerifyEmailInputType = {
+export type VerifyEmailInput = {
   code: Scalars['String'];
 };
 
@@ -736,6 +752,8 @@ export type VerifyEmailOutput = {
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
 };
+
+export type UserFragmentFragment = { __typename?: 'User', id: number, createdAt: any, updatedAt: any, name: string, password: string, email: string, company?: string | null, address?: string | null, avatar?: string | null, role: UserRole, verified: boolean, myProjects?: Array<{ __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', name: string }> | null }> | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null, projectId: number, creator: { __typename?: 'User', name: string, email: string }, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, tags?: Array<{ __typename?: 'Tag', name: string, slug: string }> | null, photos?: Array<{ __typename?: 'Photo', url: string }> | null }> | null, comments?: Array<{ __typename?: 'Comment', id: number, caption: string }> | null, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, photos?: Array<{ __typename?: 'Photo', id: number, url: string, caption: string }> | null, team?: { __typename?: 'Team', name: string, users?: Array<{ __typename?: 'User', name: string }> | null } | null };
 
 export type ProjectFragmentFragment = { __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', name: string }> | null };
 
@@ -774,6 +792,27 @@ export type CreateProjectMutationVariables = Exact<{
 
 export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'CreateProjectOutput', ok: boolean, error?: string | null } };
 
+export type VerifyEmailMutationVariables = Exact<{
+  input: VerifyEmailInput;
+}>;
+
+
+export type VerifyEmailMutation = { __typename?: 'Mutation', verifyEmail: { __typename?: 'VerifyEmailOutput', ok: boolean, error?: string | null } };
+
+export type EditAccountMutationVariables = Exact<{
+  input: EditAccountInput;
+}>;
+
+
+export type EditAccountMutation = { __typename?: 'Mutation', editAccount: { __typename?: 'EditAccountOutput', ok: boolean, error?: string | null } };
+
+export type SendVerificationEmailMutationVariables = Exact<{
+  input: SendVerificationEmailInput;
+}>;
+
+
+export type SendVerificationEmailMutation = { __typename?: 'Mutation', sendVerificationEmail: { __typename?: 'SendVerificationEmailOutput', ok: boolean, error?: string | null } };
+
 export type GetProjectsQueryVariables = Exact<{
   input: GetProjectsInput;
 }>;
@@ -791,7 +830,7 @@ export type GetProjectQuery = { __typename?: 'Query', getProject: { __typename?:
 export type GetMyProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMyProfileQuery = { __typename?: 'Query', getMyProfile: { __typename?: 'MyProfileOutput', ok: boolean, error?: string | null, user: { __typename?: 'User', name: string, role: UserRole, email: string } } };
+export type GetMyProfileQuery = { __typename?: 'Query', getMyProfile: { __typename?: 'MyProfileOutput', ok: boolean, error?: string | null, user: { __typename?: 'User', id: number, createdAt: any, updatedAt: any, name: string, password: string, email: string, company?: string | null, address?: string | null, avatar?: string | null, role: UserRole, verified: boolean, myProjects?: Array<{ __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', name: string }> | null }> | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null, projectId: number, creator: { __typename?: 'User', name: string, email: string }, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, tags?: Array<{ __typename?: 'Tag', name: string, slug: string }> | null, photos?: Array<{ __typename?: 'Photo', url: string }> | null }> | null, comments?: Array<{ __typename?: 'Comment', id: number, caption: string }> | null, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, photos?: Array<{ __typename?: 'Photo', id: number, url: string, caption: string }> | null, team?: { __typename?: 'Team', name: string, users?: Array<{ __typename?: 'User', name: string }> | null } | null } } };
 
 export type GetTasksQueryVariables = Exact<{
   input: GetTasksInput;
@@ -832,6 +871,46 @@ export const TaskFragmentFragmentDoc = gql`
   }
 }
     `;
+export const UserFragmentFragmentDoc = gql`
+    fragment UserFragment on User {
+  id
+  createdAt
+  updatedAt
+  name
+  password
+  email
+  company
+  address
+  avatar
+  role
+  myProjects {
+    ...ProjectFragment
+  }
+  tasks {
+    ...TaskFragment
+  }
+  comments {
+    id
+    caption
+  }
+  todos {
+    payload
+  }
+  verified
+  photos {
+    id
+    url
+    caption
+  }
+  team {
+    name
+    users {
+      name
+    }
+  }
+}
+    ${ProjectFragmentFragmentDoc}
+${TaskFragmentFragmentDoc}`;
 export const CreateAccountDocument = gql`
     mutation CreateAccount($input: CreateAccountInput!) {
   createAccount(input: $input) {
@@ -1002,6 +1081,108 @@ export function useCreateProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
 export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
 export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<CreateProjectMutation, CreateProjectMutationVariables>;
+export const VerifyEmailDocument = gql`
+    mutation VerifyEmail($input: VerifyEmailInput!) {
+  verifyEmail(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type VerifyEmailMutationFn = Apollo.MutationFunction<VerifyEmailMutation, VerifyEmailMutationVariables>;
+
+/**
+ * __useVerifyEmailMutation__
+ *
+ * To run a mutation, you first call `useVerifyEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyEmailMutation, { data, loading, error }] = useVerifyEmailMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useVerifyEmailMutation(baseOptions?: Apollo.MutationHookOptions<VerifyEmailMutation, VerifyEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VerifyEmailMutation, VerifyEmailMutationVariables>(VerifyEmailDocument, options);
+      }
+export type VerifyEmailMutationHookResult = ReturnType<typeof useVerifyEmailMutation>;
+export type VerifyEmailMutationResult = Apollo.MutationResult<VerifyEmailMutation>;
+export type VerifyEmailMutationOptions = Apollo.BaseMutationOptions<VerifyEmailMutation, VerifyEmailMutationVariables>;
+export const EditAccountDocument = gql`
+    mutation EditAccount($input: EditAccountInput!) {
+  editAccount(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type EditAccountMutationFn = Apollo.MutationFunction<EditAccountMutation, EditAccountMutationVariables>;
+
+/**
+ * __useEditAccountMutation__
+ *
+ * To run a mutation, you first call `useEditAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editAccountMutation, { data, loading, error }] = useEditAccountMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useEditAccountMutation(baseOptions?: Apollo.MutationHookOptions<EditAccountMutation, EditAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditAccountMutation, EditAccountMutationVariables>(EditAccountDocument, options);
+      }
+export type EditAccountMutationHookResult = ReturnType<typeof useEditAccountMutation>;
+export type EditAccountMutationResult = Apollo.MutationResult<EditAccountMutation>;
+export type EditAccountMutationOptions = Apollo.BaseMutationOptions<EditAccountMutation, EditAccountMutationVariables>;
+export const SendVerificationEmailDocument = gql`
+    mutation SendVerificationEmail($input: SendVerificationEmailInput!) {
+  sendVerificationEmail(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type SendVerificationEmailMutationFn = Apollo.MutationFunction<SendVerificationEmailMutation, SendVerificationEmailMutationVariables>;
+
+/**
+ * __useSendVerificationEmailMutation__
+ *
+ * To run a mutation, you first call `useSendVerificationEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendVerificationEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendVerificationEmailMutation, { data, loading, error }] = useSendVerificationEmailMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSendVerificationEmailMutation(baseOptions?: Apollo.MutationHookOptions<SendVerificationEmailMutation, SendVerificationEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendVerificationEmailMutation, SendVerificationEmailMutationVariables>(SendVerificationEmailDocument, options);
+      }
+export type SendVerificationEmailMutationHookResult = ReturnType<typeof useSendVerificationEmailMutation>;
+export type SendVerificationEmailMutationResult = Apollo.MutationResult<SendVerificationEmailMutation>;
+export type SendVerificationEmailMutationOptions = Apollo.BaseMutationOptions<SendVerificationEmailMutation, SendVerificationEmailMutationVariables>;
 export const GetProjectsDocument = gql`
     query GetProjects($input: GetProjectsInput!) {
   getProjects(input: $input) {
@@ -1088,13 +1269,11 @@ export const GetMyProfileDocument = gql`
     ok
     error
     user {
-      name
-      role
-      email
+      ...UserFragment
     }
   }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 
 /**
  * __useGetMyProfileQuery__

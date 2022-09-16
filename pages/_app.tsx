@@ -7,7 +7,6 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from '@mantine/core'
-import Head from 'next/head'
 import { useState } from 'react'
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -18,12 +17,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Head>
-        <meta
-          name='viewport'
-          content='minimum-scale=1, initial-scale=1, width=device-width'
-        />
-      </Head>
       <ApolloProvider client={apolloClient}>
         <ColorSchemeProvider
           colorScheme={colorScheme}

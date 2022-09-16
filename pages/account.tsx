@@ -2,7 +2,7 @@ import {
   useCreateAccountMutation,
   UserRole,
 } from '../lib/graphql/__generated__'
-import Head from 'next/head'
+
 import { NextPage } from 'next'
 import {
   Button,
@@ -19,9 +19,10 @@ import { useState } from 'react'
 import { IconChevronDown, IconUser } from '@tabler/icons'
 import { useForm } from '@mantine/form'
 import { useRouter } from 'next/router'
-import { useAuthStyles } from '../lib/client/styles/authStyles'
+import { useAuthStyles } from '../styles/authStyles'
 import { NextLink } from '@mantine/next'
 import AuthLayout from '../components/AuthLayout'
+import { useRoleStyles } from '../styles/roleStyles'
 
 interface AccountFormValues {
   name: string
@@ -34,7 +35,8 @@ const Account: NextPage = () => {
   const router = useRouter()
   const [opened, setOpened] = useState(false)
   const [accountError, setAccountError] = useState('')
-  const { classes } = useAuthStyles({ opened })
+  const { classes } = useAuthStyles()
+  const { classes: roleClasses } = useRoleStyles({ opened })
   const [selected, setSelected] = useState(UserRole['Client'])
   const form = useForm<AccountFormValues>({
     initialValues: { name: '', email: '', password: '', role: UserRole.Client },
@@ -151,14 +153,14 @@ const Account: NextPage = () => {
             width='target'
           >
             <Menu.Target>
-              <UnstyledButton className={classes.rolesControl}>
+              <UnstyledButton className={roleClasses.rolesControl}>
                 <Group spacing='xs'>
                   <IconUser size={20} />
-                  <span className={classes.label}>{selected}</span>
+                  <span className={roleClasses.label}>{selected}</span>
                 </Group>
                 <IconChevronDown
                   size={16}
-                  className={classes.icon}
+                  className={roleClasses.icon}
                   stroke={1.5}
                 />
               </UnstyledButton>

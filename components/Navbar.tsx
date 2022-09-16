@@ -24,12 +24,15 @@ import {
   IconUser,
 } from '@tabler/icons'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import metaData from '../data/metaData'
 import useIsDark from '../hooks/useIsDark'
-import useMe from '../hooks/useMe'
+
 import { isLoggedInVar } from '../lib/client/apolloVars'
-import { useLogoutMutation } from '../lib/graphql/__generated__'
+import {
+  useGetMyProfileQuery,
+  useLogoutMutation,
+} from '../lib/graphql/__generated__'
 import ThemeToggle from './ThemeToggle'
 import UserButton from './UserButton'
 
@@ -132,7 +135,7 @@ const collections = [
 
 export default function NavbarSearch() {
   const { classes } = useStyles()
-  const { data } = useMe()
+  const { data } = useGetMyProfileQuery()
   const router = useRouter()
   const [logout, { loading }] = useLogoutMutation({
     onCompleted: (result) => {
@@ -181,7 +184,10 @@ export default function NavbarSearch() {
           <Text>{metaData.siteTitle}</Text>
         </Center>
       </Navbar.Section>
-      <Navbar.Section className={classes.section}>
+      <Navbar.Section
+        className={classes.section}
+        onClick={() => router.push('/users/profile')}
+      >
         <UserButton
           image='https://i.imgur.com/fGxgcDF.png'
           name={data?.getMyProfile.user.name || 'user'}

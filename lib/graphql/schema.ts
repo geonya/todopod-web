@@ -1,5 +1,45 @@
 import { gql } from '@apollo/client'
 
+const USER_FRAGMENT = gql`
+  fragment UserFragment on User {
+    id
+    createdAt
+    updatedAt
+    name
+    password
+    email
+    company
+    address
+    avatar
+    verified
+    role
+    myProjects {
+      ...ProjectFragment
+    }
+    tasks {
+      ...TaskFragment
+    }
+    comments {
+      id
+      caption
+    }
+    todos {
+      payload
+    }
+    photos {
+      id
+      url
+      caption
+    }
+    team {
+      name
+      users {
+        name
+      }
+    }
+  }
+`
+
 const PROJECT_FRAGMENT = gql`
   fragment ProjectFragment on Project {
     id
@@ -69,6 +109,24 @@ gql`
       error
     }
   }
+  mutation VerifyEmail($input: VerifyEmailInput!) {
+    verifyEmail(input: $input) {
+      ok
+      error
+    }
+  }
+  mutation EditAccount($input: EditAccountInput!) {
+    editAccount(input: $input) {
+      ok
+      error
+    }
+  }
+  mutation SendVerificationEmail($input: SendVerificationEmailInput!) {
+    sendVerificationEmail(input: $input) {
+      ok
+      error
+    }
+  }
 `
 
 gql`
@@ -100,11 +158,10 @@ gql`
       ok
       error
       user {
-        name
-        role
-        email
+        ...UserFragment
       }
     }
+    ${USER_FRAGMENT}
   }
 
   query GetTasks($input:GetTasksInput!) {

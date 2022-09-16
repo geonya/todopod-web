@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import AuthLayout from '../components/AuthLayout'
 import { isLoggedInVar } from '../lib/client/apolloVars'
-import { useAuthStyles } from '../lib/client/styles/authStyles'
+import { useAuthStyles } from '../styles/authStyles'
 import { useLoginMutation } from '../lib/graphql/__generated__'
 
 interface LoginFormValues {
@@ -22,7 +22,7 @@ interface LoginFormValues {
 
 const Login = () => {
   const router = useRouter()
-  const { classes } = useAuthStyles({})
+  const { classes } = useAuthStyles()
   const [loginError, setLoginError] = useState('')
   const [login, { loading }] = useLoginMutation({
     onCompleted(result) {

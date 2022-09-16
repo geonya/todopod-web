@@ -1176,7 +1176,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "EditAccountInputType",
+        "name": "EditAccountInput",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -3169,7 +3169,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "EditAccountInputType",
+                    "name": "EditAccountInput",
                     "ofType": null
                   }
                 },
@@ -3438,6 +3438,39 @@
             "deprecationReason": null
           },
           {
+            "name": "sendVerificationEmail",
+            "description": null,
+            "args": [
+              {
+                "name": "input",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SendVerificationEmailInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "SendVerificationEmailOutput",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "verifyEmail",
             "description": null,
             "args": [
@@ -3449,7 +3482,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "VerifyEmailInputType",
+                    "name": "VerifyEmailInput",
                     "ofType": null
                   }
                 },
@@ -4427,6 +4460,72 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "GetTodosOutput",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "SendVerificationEmailInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "email",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "SendVerificationEmailOutput",
+        "description": null,
+        "fields": [
+          {
+            "name": "error",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ok",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               }
             },
@@ -5892,7 +5991,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "VerifyEmailInputType",
+        "name": "VerifyEmailInput",
         "description": null,
         "fields": null,
         "inputFields": [

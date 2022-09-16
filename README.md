@@ -21,5 +21,13 @@ _220822_
 - [x] Theme Toggle
 - [x] Project Card List
 - [x] Create Project
+- [x] Profile Page Layout
+- [ ] Profile Page functions
+  - [x] Use Mantine Form
+  - [x] Email Verification Button
+  - [x] User Data (name, email, password ,company)
+  - [ ] User Role Change
+- [ ] Profile Page Design Details
+- [ ] Email Verified
 - [ ] 220911 Task List 에서 List State 설정하기
 - [ ] Create Task Modal 만들기
