@@ -1,8 +1,13 @@
-import { createStyles, Text } from '@mantine/core'
+import { createStyles, Loader, Modal, Text } from '@mantine/core'
 import useIsDark from '../hooks/useIsDark'
 import { useListState } from '@mantine/hooks'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { IconGripVertical } from '@tabler/icons'
+import { useEffect, useState } from 'react'
+import {
+  useGetTasksLazyQuery,
+  useGetTasksQuery,
+} from '../lib/graphql/__generated__'
 
 const useStyles = createStyles((theme) => ({
   item: {
@@ -38,17 +43,32 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-interface DndListHandleProps {
-  data:
-    | {
-        name: string
-      }[]
-    | undefined
+interface TaskLiskProps {
+  projectId?: number
 }
 
-export default function TaskLisk({ data }: DndListHandleProps) {
+export default function TaskLisk({ projectId }: TaskLiskProps) {
   const { classes, cx } = useStyles()
+  const [opened, setOpened] = useState(false)
+
+  const [getTasks, { data, loading, error }] = useGetTasksLazyQuery()
+  useEffect(() => {
+    getTasks({
+      variables: {
+        input: {
+          projectId: projectId!,
+        },
+      },
+    })
+    if (data) {
+      const taskListData = data?.getTasks.tasks?.map((task) => ({
+        name: task.name,
+      }))
+    }
+  }, [projectId, getTasks, data])
+
   const [state, handlers] = useListState(data)
+
   const items = state.map((item, i) => (
     <Draggable key={item.name + i} index={i} draggableId={item.name + i}>
       {(provided, snapshot) => (
@@ -68,19 +88,28 @@ export default function TaskLisk({ data }: DndListHandleProps) {
     </Draggable>
   ))
   return (
-    <DragDropContext
-      onDragEnd={({ destination, source }) =>
-        handlers.reorder({ from: source.index, to: destination?.index || 0 })
-      }
-    >
-      <Droppable droppableId='task-list' direction='vertical'>
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            {items}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <>
+      <DragDropContext
+        onDragEnd={({ destination, source }) =>
+          handlers.reorder({ from: source.index, to: destination?.index || 0 })
+        }
+      >
+        <Droppable droppableId='task-list' direction='vertical'>
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {items}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title='Create Project'
+      >
+        {/* <CraeteTask /> */}
+      </Modal>
+    </>
   )
 }

@@ -11,6 +11,29 @@ const PROJECT_FRAGMENT = gql`
   }
 `
 
+const TASK_FRAGMENT = gql`
+  fragment TaskFragment on Task {
+    id
+    name
+    description
+    creator {
+      name
+      email
+    }
+    projectId
+    todos {
+      payload
+    }
+    tags {
+      name
+      slug
+    }
+    photos {
+      url
+    }
+  }
+`
+
 gql`
   mutation CreateAccount($input: CreateAccountInput!) {
     createAccount(input: $input) {
@@ -82,5 +105,16 @@ gql`
         email
       }
     }
+  }
+
+  query GetTasks($input:GetTasksInput!) {
+    getTasks(input:$input) {
+      ok
+      error
+      tasks {
+        ...TaskFragment
+      }
+    }
+    ${TASK_FRAGMENT}
   }
 `

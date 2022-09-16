@@ -3,7 +3,7 @@ import ProjectsList from '../../components/ProjectsList'
 
 export default function Projects() {
   return (
-    <Layout title='Main'>
+    <Layout>
       <ProjectsList />
     </Layout>
   )

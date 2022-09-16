@@ -2204,7 +2204,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "GetTasksInputType",
+        "name": "GetTasksInput",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -4313,7 +4313,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "GetTasksInputType",
+                    "name": "GetTasksInput",
                     "ofType": null
                   }
                 },

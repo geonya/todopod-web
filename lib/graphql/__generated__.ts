@@ -293,7 +293,7 @@ export type GetTaskOutput = {
   task?: Maybe<Task>;
 };
 
-export type GetTasksInputType = {
+export type GetTasksInput = {
   pages?: InputMaybe<Scalars['Int']>;
   projectId: Scalars['Int'];
 };
@@ -589,7 +589,7 @@ export type QueryGetTaskArgs = {
 
 
 export type QueryGetTasksArgs = {
-  input: GetTasksInputType;
+  input: GetTasksInput;
 };
 
 
@@ -739,6 +739,8 @@ export type VerifyEmailOutput = {
 
 export type ProjectFragmentFragment = { __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', name: string }> | null };
 
+export type TaskFragmentFragment = { __typename?: 'Task', id: number, name: string, description?: string | null, projectId: number, creator: { __typename?: 'User', name: string, email: string }, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, tags?: Array<{ __typename?: 'Tag', name: string, slug: string }> | null, photos?: Array<{ __typename?: 'Photo', url: string }> | null };
+
 export type CreateAccountMutationVariables = Exact<{
   input: CreateAccountInput;
 }>;
@@ -791,6 +793,13 @@ export type GetMyProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetMyProfileQuery = { __typename?: 'Query', getMyProfile: { __typename?: 'MyProfileOutput', ok: boolean, error?: string | null, user: { __typename?: 'User', name: string, role: UserRole, email: string } } };
 
+export type GetTasksQueryVariables = Exact<{
+  input: GetTasksInput;
+}>;
+
+
+export type GetTasksQuery = { __typename?: 'Query', getTasks: { __typename?: 'GetTasksOutput', ok: boolean, error?: string | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null, projectId: number, creator: { __typename?: 'User', name: string, email: string }, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, tags?: Array<{ __typename?: 'Tag', name: string, slug: string }> | null, photos?: Array<{ __typename?: 'Photo', url: string }> | null }> | null } };
+
 export const ProjectFragmentFragmentDoc = gql`
     fragment ProjectFragment on Project {
   id
@@ -798,6 +807,28 @@ export const ProjectFragmentFragmentDoc = gql`
   description
   tasks {
     name
+  }
+}
+    `;
+export const TaskFragmentFragmentDoc = gql`
+    fragment TaskFragment on Task {
+  id
+  name
+  description
+  creator {
+    name
+    email
+  }
+  projectId
+  todos {
+    payload
+  }
+  tags {
+    name
+    slug
+  }
+  photos {
+    url
   }
 }
     `;
@@ -1091,3 +1122,42 @@ export function useGetMyProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetMyProfileQueryHookResult = ReturnType<typeof useGetMyProfileQuery>;
 export type GetMyProfileLazyQueryHookResult = ReturnType<typeof useGetMyProfileLazyQuery>;
 export type GetMyProfileQueryResult = Apollo.QueryResult<GetMyProfileQuery, GetMyProfileQueryVariables>;
+export const GetTasksDocument = gql`
+    query GetTasks($input: GetTasksInput!) {
+  getTasks(input: $input) {
+    ok
+    error
+    tasks {
+      ...TaskFragment
+    }
+  }
+}
+    ${TaskFragmentFragmentDoc}`;
+
+/**
+ * __useGetTasksQuery__
+ *
+ * To run a query within a React component, call `useGetTasksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTasksQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTasksQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetTasksQuery(baseOptions: Apollo.QueryHookOptions<GetTasksQuery, GetTasksQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTasksQuery, GetTasksQueryVariables>(GetTasksDocument, options);
+      }
+export function useGetTasksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTasksQuery, GetTasksQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTasksQuery, GetTasksQueryVariables>(GetTasksDocument, options);
+        }
+export type GetTasksQueryHookResult = ReturnType<typeof useGetTasksQuery>;
+export type GetTasksLazyQueryHookResult = ReturnType<typeof useGetTasksLazyQuery>;
+export type GetTasksQueryResult = Apollo.QueryResult<GetTasksQuery, GetTasksQueryVariables>;

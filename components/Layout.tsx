@@ -5,13 +5,7 @@ import metaData from '../data/metaData'
 import useIsDark from '../hooks/useIsDark'
 import NavbarSearch from './Navbar'
 
-export default function Layout({
-  children,
-  title = 'Page',
-}: {
-  children: React.ReactNode
-  title?: string
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const isDark = useIsDark()
   return (
     <AppShell
