@@ -39,7 +39,7 @@ export default function ProjectPage() {
   }
 
   return (
-    <Layout title={data.getProject.project?.title}>
+    <Layout>
       <Title>{data.getProject.project?.title}</Title>
       <TaskLisk projectId={+router.query.project!} />
     </Layout>

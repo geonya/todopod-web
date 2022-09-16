@@ -8,7 +8,6 @@ import {
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { NextLink } from '@mantine/next'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import AuthLayout from '../components/AuthLayout'

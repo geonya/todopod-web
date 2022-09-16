@@ -5,18 +5,12 @@ import metaData from '../data/metaData'
 
 export default function AuthLayout({
   children,
-  title,
 }: {
   children: React.ReactNode
   title: string
 }) {
   return (
     <Container fluid p={0}>
-      <Head>
-        <title>
-          {title} | {metaData.siteTitle}
-        </title>
-      </Head>
       {children}
     </Container>
   )

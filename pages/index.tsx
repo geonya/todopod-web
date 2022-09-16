@@ -5,7 +5,7 @@ interface HomeProps {}
 
 const Home: NextPage<HomeProps> = () => {
   return (
-    <Layout title='Home'>
+    <Layout>
       <h1>This is Home!</h1>
     </Layout>
   )
