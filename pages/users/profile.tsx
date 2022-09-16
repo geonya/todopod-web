@@ -31,10 +31,12 @@ interface UserFormValues {
 
 export default function Profile() {
   const [opened, setOpened] = useState(false)
-  const [selected, setSelected] = useState(UserRole['Client'])
+  const [selectedRole, setSelectedRole] = useState(UserRole['Client'])
   const { classes: roleClasses } = useRoleStyles({ opened })
+
   const { data } = useGetMyProfileQuery()
   const userData = data?.getMyProfile.user
+
   const userForm = useForm<UserFormValues>({
     initialValues: {
       name: '',
@@ -43,9 +45,10 @@ export default function Profile() {
       company: '',
     },
   })
+
   const [updateProfile, { loading }] = useEditAccountMutation()
+
   const userFormOnSubmit = async (data: UserFormValues) => {
-    console.log(Boolean(data.password))
     try {
       await updateProfile({
         variables: {
@@ -54,6 +57,7 @@ export default function Profile() {
             ...(data.password && { password: data.password }),
             email: data.email,
             ...(data.company && { company: data.company }),
+            role: selectedRole,
           },
         },
       })
@@ -61,7 +65,9 @@ export default function Profile() {
       console.error(error)
     }
   }
+
   const [sendVerificationEmail] = useSendVerificationEmailMutation()
+
   const emailVerify = async () => {
     const email = userForm.values.email
     if (!email) return
@@ -73,8 +79,9 @@ export default function Profile() {
       },
     })
   }
+
   const handleRoleSelect = (role: UserRole) => {
-    setSelected(role)
+    setSelectedRole(role)
     userForm.setFieldValue('role', role)
   }
   const roles = (Object.keys(UserRole) as Array<keyof typeof UserRole>).map(
@@ -94,6 +101,7 @@ export default function Profile() {
     userForm.setFieldValue('name', userData.name)
     userForm.setFieldValue('email', userData.email)
     userForm.setFieldValue('company', userData.company || '')
+    setSelectedRole(userData.role)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData])
   return (
@@ -125,27 +133,29 @@ export default function Profile() {
         {!data?.getMyProfile.user.verified && (
           <Text color='red'>이메일 인증이 필요합니다.</Text>
         )}
-        <Menu
-          onOpen={() => setOpened(true)}
-          onClose={() => setOpened(false)}
-          radius='md'
-          width='target'
-        >
-          <Menu.Target>
-            <UnstyledButton className={roleClasses.rolesControl}>
-              <Group spacing='xs'>
-                <IconUser size={20} />
-                <span className={roleClasses.label}>{selected}</span>
-              </Group>
-              <IconChevronDown
-                size={16}
-                className={roleClasses.icon}
-                stroke={1.5}
-              />
-            </UnstyledButton>
-          </Menu.Target>
-          <Menu.Dropdown>{roles}</Menu.Dropdown>
-        </Menu>
+        <Box mt={20}>
+          <Menu
+            onOpen={() => setOpened(true)}
+            onClose={() => setOpened(false)}
+            radius='md'
+            width='target'
+          >
+            <Menu.Target>
+              <UnstyledButton className={roleClasses.rolesControl}>
+                <Group spacing='xs'>
+                  <IconUser size={20} />
+                  <span className={roleClasses.label}>{selectedRole}</span>
+                </Group>
+                <IconChevronDown
+                  size={16}
+                  className={roleClasses.icon}
+                  stroke={1.5}
+                />
+              </UnstyledButton>
+            </Menu.Target>
+            <Menu.Dropdown>{roles}</Menu.Dropdown>
+          </Menu>
+        </Box>
         <Stack mt={20}>
           <Button color='orange' onClick={emailVerify}>
             E-Mail 인증하기

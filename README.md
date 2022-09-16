@@ -26,7 +26,7 @@ _220822_
   - [x] Use Mantine Form
   - [x] Email Verification Button
   - [x] User Data (name, email, password ,company)
-  - [ ] User Role Change
+  - [x] User Role Change
 - [ ] Profile Page Design Details
 - [ ] Email Verified
 - [ ] 220911 Task List 에서 List State 설정하기
