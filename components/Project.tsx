@@ -50,7 +50,6 @@ export default function Project({
 }: ProjectProps) {
   const { classes } = useStyles()
   const isDark = useIsDark()
-
   const tagList = tags.map((tag, i) => (
     <Badge
       key={i}
@@ -60,6 +59,7 @@ export default function Project({
       {tag}
     </Badge>
   ))
+
   return (
     <Card withBorder radius='md' p='md' className={classes.card}>
       <Card.Section>

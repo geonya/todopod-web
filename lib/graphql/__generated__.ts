@@ -765,9 +765,9 @@ export type VerifyEmailOutput = {
   ok: Scalars['Boolean'];
 };
 
-export type UserFragmentFragment = { __typename?: 'User', id: number, createdAt: any, updatedAt: any, name: string, password: string, email: string, company?: string | null, address?: string | null, verified: boolean, role: UserRole, avatar?: { __typename?: 'Avatar', url: string } | null, myProjects?: Array<{ __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', name: string }> | null }> | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null, projectId: number, creator: { __typename?: 'User', name: string, email: string }, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, tags?: Array<{ __typename?: 'Tag', name: string, slug: string }> | null, photos?: Array<{ __typename?: 'Photo', url: string }> | null }> | null, comments?: Array<{ __typename?: 'Comment', id: number, caption: string }> | null, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, photos?: Array<{ __typename?: 'Photo', id: number, url: string, caption: string }> | null, team?: { __typename?: 'Team', name: string, users?: Array<{ __typename?: 'User', name: string }> | null } | null };
+export type UserFragmentFragment = { __typename?: 'User', id: number, createdAt: any, updatedAt: any, name: string, password: string, email: string, company?: string | null, address?: string | null, verified: boolean, role: UserRole, avatar?: { __typename?: 'Avatar', url: string } | null, myProjects?: Array<{ __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null }> | null }> | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null, projectId: number, creator: { __typename?: 'User', name: string, email: string }, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, tags?: Array<{ __typename?: 'Tag', name: string, slug: string }> | null, photos?: Array<{ __typename?: 'Photo', url: string }> | null }> | null, comments?: Array<{ __typename?: 'Comment', id: number, caption: string }> | null, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, photos?: Array<{ __typename?: 'Photo', id: number, url: string, caption: string }> | null, team?: { __typename?: 'Team', name: string, users?: Array<{ __typename?: 'User', name: string }> | null } | null };
 
-export type ProjectFragmentFragment = { __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', name: string }> | null };
+export type ProjectFragmentFragment = { __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null }> | null };
 
 export type TaskFragmentFragment = { __typename?: 'Task', id: number, name: string, description?: string | null, projectId: number, creator: { __typename?: 'User', name: string, email: string }, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, tags?: Array<{ __typename?: 'Tag', name: string, slug: string }> | null, photos?: Array<{ __typename?: 'Photo', url: string }> | null };
 
@@ -830,19 +830,19 @@ export type GetProjectsQueryVariables = Exact<{
 }>;
 
 
-export type GetProjectsQuery = { __typename?: 'Query', getProjects: { __typename?: 'GetProjectsOutput', ok: boolean, error?: string | null, totalProjectsCount?: number | null, totalPages?: number | null, projects?: Array<{ __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', name: string }> | null }> | null } };
+export type GetProjectsQuery = { __typename?: 'Query', getProjects: { __typename?: 'GetProjectsOutput', ok: boolean, error?: string | null, totalProjectsCount?: number | null, totalPages?: number | null, projects?: Array<{ __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null }> | null }> | null } };
 
 export type GetProjectQueryVariables = Exact<{
   input: GetProjectInput;
 }>;
 
 
-export type GetProjectQuery = { __typename?: 'Query', getProject: { __typename?: 'GetProjectOutput', ok: boolean, error?: string | null, project?: { __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', name: string }> | null } | null } };
+export type GetProjectQuery = { __typename?: 'Query', getProject: { __typename?: 'GetProjectOutput', ok: boolean, error?: string | null, project?: { __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null }> | null } | null } };
 
 export type GetMyProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMyProfileQuery = { __typename?: 'Query', getMyProfile: { __typename?: 'MyProfileOutput', ok: boolean, error?: string | null, user: { __typename?: 'User', id: number, createdAt: any, updatedAt: any, name: string, password: string, email: string, company?: string | null, address?: string | null, verified: boolean, role: UserRole, avatar?: { __typename?: 'Avatar', url: string } | null, myProjects?: Array<{ __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', name: string }> | null }> | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null, projectId: number, creator: { __typename?: 'User', name: string, email: string }, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, tags?: Array<{ __typename?: 'Tag', name: string, slug: string }> | null, photos?: Array<{ __typename?: 'Photo', url: string }> | null }> | null, comments?: Array<{ __typename?: 'Comment', id: number, caption: string }> | null, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, photos?: Array<{ __typename?: 'Photo', id: number, url: string, caption: string }> | null, team?: { __typename?: 'Team', name: string, users?: Array<{ __typename?: 'User', name: string }> | null } | null } } };
+export type GetMyProfileQuery = { __typename?: 'Query', getMyProfile: { __typename?: 'MyProfileOutput', ok: boolean, error?: string | null, user: { __typename?: 'User', id: number, createdAt: any, updatedAt: any, name: string, password: string, email: string, company?: string | null, address?: string | null, verified: boolean, role: UserRole, avatar?: { __typename?: 'Avatar', url: string } | null, myProjects?: Array<{ __typename?: 'Project', id: number, title: string, description?: string | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null }> | null }> | null, tasks?: Array<{ __typename?: 'Task', id: number, name: string, description?: string | null, projectId: number, creator: { __typename?: 'User', name: string, email: string }, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, tags?: Array<{ __typename?: 'Tag', name: string, slug: string }> | null, photos?: Array<{ __typename?: 'Photo', url: string }> | null }> | null, comments?: Array<{ __typename?: 'Comment', id: number, caption: string }> | null, todos?: Array<{ __typename?: 'Todo', payload: string }> | null, photos?: Array<{ __typename?: 'Photo', id: number, url: string, caption: string }> | null, team?: { __typename?: 'Team', name: string, users?: Array<{ __typename?: 'User', name: string }> | null } | null } } };
 
 export type GetTasksQueryVariables = Exact<{
   input: GetTasksInput;
@@ -857,7 +857,9 @@ export const ProjectFragmentFragmentDoc = gql`
   title
   description
   tasks {
+    id
     name
+    description
   }
 }
     `;

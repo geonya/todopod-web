@@ -14,6 +14,7 @@ import { useGetProjectsQuery } from '../lib/graphql/__generated__'
 import CraeteProject from './CreateProject'
 import Loading from './Loading'
 import Project from './Project'
+import WriteButton from './WriteButton'
 
 export const createProjectModalOpenedVar = makeVar(false)
 
@@ -27,14 +28,17 @@ export default function ProjectsList() {
       },
     },
   })
-
   const projects = data?.getProjects.projects
+
+  const writeButtonOnClick = () => {
+    createProjectModalOpenedVar(true)
+  }
 
   if (error) return <div>ERROR : {error.message}</div>
   if (loading) return <Loading />
 
   return (
-    <Stack>
+    <Stack spacing='xl'>
       <Grid>
         {projects?.map((project, i) => (
           <Grid.Col xs={6} sm={4} md={3} lg={3} xl={2} key={i}>
@@ -61,23 +65,7 @@ export default function ProjectsList() {
         boundaries={3}
         initialPage={5}
       />
-      <UnstyledButton
-        sx={(theme) => ({
-          position: 'fixed',
-          right: 20,
-          bottom: 50,
-          backgroundColor: theme.colors.blue[6],
-          color: theme.white,
-          borderRadius: '50%',
-          padding: 10,
-          ':hover': {
-            opacity: 0.5,
-          },
-        })}
-        onClick={() => createProjectModalOpenedVar(true)}
-      >
-        <IconPencil size={45} />
-      </UnstyledButton>
+      <WriteButton actionFn={writeButtonOnClick} />
       <Modal
         centered
         opened={opened}

@@ -48,7 +48,9 @@ export const PROJECT_FRAGMENT = gql`
     title
     description
     tasks {
+      id
       name
+      description
     }
   }
 `

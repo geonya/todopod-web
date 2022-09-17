@@ -1,13 +1,11 @@
-import { createStyles, Loader, Modal, Text } from '@mantine/core'
+import { createStyles, Text } from '@mantine/core'
 import useIsDark from '../hooks/useIsDark'
 import { useListState } from '@mantine/hooks'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { IconGripVertical } from '@tabler/icons'
 import { useEffect, useState } from 'react'
-import {
-  useGetTasksLazyQuery,
-  useGetTasksQuery,
-} from '../lib/graphql/__generated__'
+import { Task, useGetTasksLazyQuery } from '../lib/graphql/__generated__'
+import Loading from './Loading'
 
 const useStyles = createStyles((theme) => ({
   item: {
@@ -46,12 +44,21 @@ const useStyles = createStyles((theme) => ({
 interface TaskLiskProps {
   projectId?: number
 }
+interface ITask {
+  name: string
+}
 
 export default function TaskLisk({ projectId }: TaskLiskProps) {
   const { classes, cx } = useStyles()
-  const [opened, setOpened] = useState(false)
 
-  const [getTasks, { data, loading, error }] = useGetTasksLazyQuery()
+  const [state, handler] = useListState<ITask>([])
+
+  const [getTasks, { data, loading, error }] = useGetTasksLazyQuery({
+    onCompleted: (data) => {
+      if (!data.getTasks.ok || !data.getTasks.tasks) return
+      handler.setState(data.getTasks.tasks)
+    },
+  })
   useEffect(() => {
     getTasks({
       variables: {
@@ -60,14 +67,7 @@ export default function TaskLisk({ projectId }: TaskLiskProps) {
         },
       },
     })
-    if (data) {
-      const taskListData = data?.getTasks.tasks?.map((task) => ({
-        name: task.name,
-      }))
-    }
   }, [projectId, getTasks, data])
-
-  const [state, handlers] = useListState(data)
 
   const items = state.map((item, i) => (
     <Draggable key={item.name + i} index={i} draggableId={item.name + i}>
@@ -87,11 +87,14 @@ export default function TaskLisk({ projectId }: TaskLiskProps) {
       )}
     </Draggable>
   ))
+
+  if (loading) return <Loading />
+
   return (
     <>
       <DragDropContext
         onDragEnd={({ destination, source }) =>
-          handlers.reorder({ from: source.index, to: destination?.index || 0 })
+          handler.reorder({ from: source.index, to: destination?.index || 0 })
         }
       >
         <Droppable droppableId='task-list' direction='vertical'>
@@ -103,13 +106,6 @@ export default function TaskLisk({ projectId }: TaskLiskProps) {
           )}
         </Droppable>
       </DragDropContext>
-      <Modal
-        opened={opened}
-        onClose={() => setOpened(false)}
-        title='Create Project'
-      >
-        {/* <CraeteTask /> */}
-      </Modal>
     </>
   )
 }

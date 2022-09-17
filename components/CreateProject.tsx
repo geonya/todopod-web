@@ -1,9 +1,7 @@
-import { gql, useApolloClient } from '@apollo/client'
+import { gql } from '@apollo/client'
 import { Button, createStyles, Select, TextInput } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
 import { useForm } from '@mantine/form'
-import Router, { useRouter } from 'next/router'
-import { PROJECT_FRAGMENT } from '../lib/graphql/schema'
 import { useCreateProjectMutation } from '../lib/graphql/__generated__'
 import { createProjectModalOpenedVar } from './ProjectsList'
 
@@ -48,9 +46,6 @@ export default function CraeteProject() {
     },
   })
 
-  const router = useRouter()
-  const client = useApolloClient()
-
   const [createProject] = useCreateProjectMutation({
     onCompleted: (data) => {
       if (data.createProject.ok) {
@@ -72,13 +67,12 @@ export default function CraeteProject() {
               `,
               data: {
                 __typename: 'Project',
-                id: +existingItems.projects[0].id + 1,
+                id: existingItems.projects.length + 1,
                 title: form.values.title,
                 description: form.values.description,
               },
             })
             const newProjects = [newProjectRef, ...existingItems.projects]
-            console.log(newProjects)
             return { ...existingItems, projects: newProjects }
           },
         },

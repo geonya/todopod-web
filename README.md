@@ -21,7 +21,7 @@ _220822_
 - [x] Theme Toggle
 - [x] Project Card List
 - [x] Create Project
-- [ ] Responsive Navbar Showing
+- [x] Responsive Navbar Showing
 
 ### Profile
 
@@ -46,4 +46,6 @@ _220822_
 ### Task
 
 - [ ] Task List Layout
-- [ ] Create Task Modal
+- [x] Create Task Modal
+- [x] Create Task Mutation
+- [x] Create Task Caching
