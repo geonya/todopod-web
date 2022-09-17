@@ -29,7 +29,6 @@
     "deepmerge": "^4.2.2",
     "embla-carousel-react": "^7.0.1",
     "graphql": "^16.6.0",
-    "graphql-upload-minimal": "^1.5.3",
     "lodash": "^4.17.21",
     "next": "12.2.5",
     "next-cookies": "^2.0.3",

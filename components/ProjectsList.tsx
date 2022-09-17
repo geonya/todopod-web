@@ -1,40 +1,45 @@
 import { makeVar, NetworkStatus, useReactiveVar } from '@apollo/client'
-import { Grid, Modal, UnstyledButton } from '@mantine/core'
+import {
+  Center,
+  Grid,
+  Loader,
+  Modal,
+  Pagination,
+  Stack,
+  UnstyledButton,
+} from '@mantine/core'
 import { IconPencil } from '@tabler/icons'
 import { useState } from 'react'
 import { useGetProjectsQuery } from '../lib/graphql/__generated__'
 import CraeteProject from './CreateProject'
-import Layout from './Layout'
 import Project from './Project'
 
 export const createProjectModalOpenedVar = makeVar(false)
 
 export default function ProjectsList() {
+  const [activePage, setPage] = useState(1)
   const opened = useReactiveVar(createProjectModalOpenedVar)
-
   const { loading, error, data, fetchMore, networkStatus } =
     useGetProjectsQuery({
       variables: {
         input: {
-          page: 1,
+          page: activePage,
         },
       },
     })
-  const loadingMoreProjects = networkStatus === NetworkStatus.fetchMore
+
   const projects = data?.getProjects.projects
-  const loadMoreProjects = () => {
-    fetchMore({
-      variables: {
-        skip: projects?.length,
-      },
-    })
-  }
 
   if (error) return <div>ERROR : {error.message}</div>
-  if (loading && !loadingMoreProjects) return <div>Loading...</div>
+  if (loading)
+    return (
+      <Center sx={{ width: '100%', height: '100vh' }}>
+        <Loader />
+      </Center>
+    )
 
   return (
-    <>
+    <Stack>
       <Grid>
         {projects?.map((project, i) => (
           <Grid.Col span={3} key={i}>
@@ -50,6 +55,17 @@ export default function ProjectsList() {
           </Grid.Col>
         ))}
       </Grid>
+      <Pagination
+        total={data?.getProjects.totalPages || 1}
+        sx={{ width: '100%' }}
+        position='center'
+        page={activePage}
+        onChange={(page) => {
+          setPage(page)
+        }}
+        boundaries={3}
+        initialPage={5}
+      />
       <UnstyledButton
         sx={(theme) => ({
           position: 'fixed',
@@ -75,6 +91,6 @@ export default function ProjectsList() {
       >
         <CraeteProject />
       </Modal>
-    </>
+    </Stack>
   )
 }
