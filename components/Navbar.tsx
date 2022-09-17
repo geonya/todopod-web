@@ -33,11 +33,11 @@ import {
   useGetMyProfileQuery,
   useLogoutMutation,
 } from '../lib/graphql/__generated__'
+import AppTitle from './AppTitle'
 import ThemeToggle from './ThemeToggle'
 import UserButton from './UserButton'
 
 const useStyles = createStyles((theme) => ({
-  navbar: {},
   section: {
     padding: '5px 0',
     '&:not(:last-of-type)': {
@@ -177,12 +177,9 @@ export default function NavbarSearch() {
     </Link>
   ))
   return (
-    <Navbar width={{ sm: 250 }} className={classes.navbar}>
+    <>
       <Navbar.Section className={classes.section}>
-        <Center py={10}>
-          <IconCheckbox size={18} />
-          <Text>{metaData.siteTitle}</Text>
-        </Center>
+        <AppTitle />
       </Navbar.Section>
       <Navbar.Section
         className={classes.section}
@@ -241,6 +238,6 @@ export default function NavbarSearch() {
       <Box mt={20}>
         <ThemeToggle />
       </Box>
-    </Navbar>
+    </>
   )
 }

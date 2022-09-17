@@ -1,7 +1,20 @@
-import { AppShell, Center, Notification } from '@mantine/core'
-import React from 'react'
+import {
+  AppShell,
+  Box,
+  Burger,
+  Center,
+  Group,
+  Header,
+  Navbar,
+  Notification,
+  useMantineTheme,
+} from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
+import React, { useEffect, useState } from 'react'
 import useIsDark from '../hooks/useIsDark'
 import { useGetMyProfileQuery } from '../lib/graphql/__generated__'
+import AppTitle from './AppTitle'
+import EmailVerifiedNoti from './EmailVerifiedNoti'
 import NavbarSearch from './Navbar'
 
 interface LayoutProps {
@@ -12,33 +25,46 @@ interface LayoutProps {
 export default function Layout({ children, centered }: LayoutProps) {
   const isDark = useIsDark()
   const { data } = useGetMyProfileQuery()
+  const [navBarHidden, setNavbarHidden] = useState(false)
+  const theme = useMantineTheme()
+  const matches = useMediaQuery(`(max-width:${theme.breakpoints.md}px)`)
+  useEffect(() => {
+    if (matches) {
+      setNavbarHidden(true)
+    }
+  }, [matches, setNavbarHidden])
   return (
     <AppShell
-      navbar={<NavbarSearch />}
+      navbarOffsetBreakpoint='md'
+      navbar={
+        <Navbar width={{ sm: 250 }} hiddenBreakpoint='md' hidden={navBarHidden}>
+          <NavbarSearch />
+        </Navbar>
+      }
+      header={
+        matches ? (
+          <Header height={50} sx={{ display: 'flex', alignItems: 'center' }}>
+            <Burger
+              opened={!navBarHidden}
+              onClick={() => setNavbarHidden((o) => !o)}
+            />
+            <Box mx='auto'>
+              <AppTitle />
+            </Box>
+          </Header>
+        ) : (
+          <></>
+        )
+      }
       sx={(theme) => ({
         main: {
           backgroundColor: isDark ? theme.colors.dark[8] : theme.colors.gray[0],
         },
       })}
     >
-      {data?.getMyProfile.user.verified === false ? (
-        <Notification
-          color='red'
-          sx={{
-            width: '50%',
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            margin: '0 auto',
-            top: 10,
-            zIndex: 999,
-          }}
-          disallowClose
-        >
-          이메일 확인이 필요합니다.
-        </Notification>
-      ) : null}
-
+      <EmailVerifiedNoti
+        verified={data?.getMyProfile.user.verified !== false}
+      />
       {centered ? (
         <Center sx={{ width: '100%', height: '100vh' }}>{children}</Center>
       ) : (

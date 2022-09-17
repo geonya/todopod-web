@@ -37,7 +37,7 @@ export default function ProjectsList() {
     <Stack>
       <Grid>
         {projects?.map((project, i) => (
-          <Grid.Col span={3} key={i}>
+          <Grid.Col xs={6} sm={4} md={3} lg={3} xl={2} key={i}>
             <Project
               id={project.id}
               image={

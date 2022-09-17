@@ -21,8 +21,13 @@ _220822_
 - [x] Theme Toggle
 - [x] Project Card List
 - [x] Create Project
+- [ ] Responsive Navbar Showing
+
+### Profile
+
 - [x] Profile Page Layout
-- [ ] Profile Page functions
+  - [ ] Profile Page Design Details
+- [x] Profile Page functions
 
   - [x] Use Mantine Form
   - [x] Email Verification Button
@@ -31,7 +36,14 @@ _220822_
   - [x] User Avatar Dropzone
   - [x] Avatar Upload to AWS S3 storage
 
-- [ ] Profile Page Design Details
-- [ ] Email Verified
-- [ ] 220911 Task List 에서 List State 설정하기
-- [ ] Create Task Modal 만들기
+### Project
+
+- [x] Project List Pagination
+- [x] Loader Component
+- [x] Email Verified
+- [x] Project List Responsive Grid Layout
+
+### Task
+
+- [ ] Task List Layout
+- [ ] Create Task Modal
