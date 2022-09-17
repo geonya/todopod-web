@@ -41,7 +41,7 @@ interface ProjectProps {
   tags: string[]
 }
 
-export default function Project({
+export default function ProjectCard({
   id,
   image,
   title,

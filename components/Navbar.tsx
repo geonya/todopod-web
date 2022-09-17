@@ -3,7 +3,6 @@ import {
   ActionIcon,
   Badge,
   Box,
-  Center,
   Code,
   createStyles,
   Group,
@@ -25,8 +24,7 @@ import {
   IconUser,
 } from '@tabler/icons'
 import Link from 'next/link'
-import { Router, useRouter } from 'next/router'
-import metaData from '../data/metaData'
+import { useRouter } from 'next/router'
 import useIsDark from '../hooks/useIsDark'
 
 import { isLoggedInVar } from '../lib/client/apolloVars'
@@ -144,7 +142,6 @@ export default function NavbarSearch() {
       if (result.logout.ok) {
         isLoggedInVar(false)
         router.push('/login')
-
         // reset cache
         client.clearStore()
       }

@@ -1,13 +1,5 @@
 import { makeVar, useReactiveVar } from '@apollo/client'
-import {
-  createStyles,
-  Grid,
-  Modal,
-  ScrollArea,
-  Table,
-  Text,
-  Title,
-} from '@mantine/core'
+import { createStyles, Grid, Modal, Text, Title } from '@mantine/core'
 import { useListState } from '@mantine/hooks'
 import { IconGripVertical } from '@tabler/icons'
 import { useRouter } from 'next/router'
@@ -16,7 +8,6 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import CraeteTask from '../../components/CraeteTask'
 import Layout from '../../components/Layout'
 import Loading from '../../components/Loading'
-import TaskLisk from '../../components/TaskList'
 import WriteButton from '../../components/WriteButton'
 import { useGetProjectLazyQuery } from '../../lib/graphql/__generated__'
 
@@ -116,7 +107,6 @@ export default function ProjectPage() {
     }
   }, [router, getProject])
 
-  const [scrolled, setScrolled] = useState(false)
   const { classes, cx } = useStyles()
   const readyRows = state.map((task, i) => (
     <Draggable key={task.id} index={i} draggableId={task.name + i + 'x'}>
