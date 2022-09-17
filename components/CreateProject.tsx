@@ -1,7 +1,11 @@
+import { gql, useApolloClient } from '@apollo/client'
 import { Button, createStyles, Select, TextInput } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
 import { useForm } from '@mantine/form'
+import Router, { useRouter } from 'next/router'
+import { PROJECT_FRAGMENT } from '../lib/graphql/schema'
 import { useCreateProjectMutation } from '../lib/graphql/__generated__'
+import { createProjectModalOpenedVar } from './ProjectsList'
 
 interface CreateProjectFormValues {
   title: string
@@ -44,38 +48,74 @@ export default function CraeteProject() {
     },
   })
 
-  const [createProject] = useCreateProjectMutation()
+  const router = useRouter()
+  const client = useApolloClient()
+
+  const [createProject] = useCreateProjectMutation({
+    onCompleted: (data) => {
+      if (data.createProject.ok) {
+        createProjectModalOpenedVar(false)
+      }
+    },
+    update(cache, { data }) {
+      if (!data?.createProject.ok) return
+      cache.modify({
+        fields: {
+          getProjects(existingItems) {
+            const newProjectRef = cache.writeFragment({
+              fragment: gql`
+                fragment NewProject on Project {
+                  id
+                  title
+                  description
+                }
+              `,
+              data: {
+                __typename: 'Project',
+                id: +existingItems.projects[0].id + 1,
+                title: form.values.title,
+                description: form.values.description,
+              },
+            })
+            const newProjects = [newProjectRef, ...existingItems.projects]
+            console.log(newProjects)
+            return { ...existingItems, projects: newProjects }
+          },
+        },
+      })
+    },
+  })
   return (
     <form>
       <TextInput
         {...form.getInputProps('title')}
-        label='title'
+        label='제목'
         placeholder='project title'
         classNames={classes}
       />
       <TextInput
         style={{ marginTop: 20 }}
         {...form.getInputProps('description')}
-        label='description'
+        label='설명'
         placeholder='project description'
         classNames={classes}
       />
       <Select
         style={{ marginTop: 20, zIndex: 2 }}
         data={['geony', 'bora', 'happy']}
-        label='This is Select'
+        label='태그'
         classNames={classes}
       />
       <DatePicker
         style={{ marginTop: 20 }}
-        label='Date'
+        label='마감 기한'
         placeholder='When will you leave'
         classNames={classes}
         clearable={false}
       />
       <Button
         radius='md'
-        style={{ flex: 1, marginTop: 20 }}
+        style={{ marginTop: 20, width: '100%' }}
         onClick={() =>
           createProject({
             variables: {
@@ -86,7 +126,7 @@ export default function CraeteProject() {
           })
         }
       >
-        프로젝트 만들기
+        프로젝트 생성
       </Button>
     </form>
   )

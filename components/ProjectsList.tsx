@@ -1,4 +1,4 @@
-import { NetworkStatus } from '@apollo/client'
+import { makeVar, NetworkStatus, useReactiveVar } from '@apollo/client'
 import { Grid, Modal, UnstyledButton } from '@mantine/core'
 import { IconPencil } from '@tabler/icons'
 import { useState } from 'react'
@@ -7,8 +7,11 @@ import CraeteProject from './CreateProject'
 import Layout from './Layout'
 import Project from './Project'
 
+export const createProjectModalOpenedVar = makeVar(false)
+
 export default function ProjectsList() {
-  const [opened, setOpened] = useState(false)
+  const opened = useReactiveVar(createProjectModalOpenedVar)
+
   const { loading, error, data, fetchMore, networkStatus } =
     useGetProjectsQuery({
       variables: {
@@ -60,14 +63,15 @@ export default function ProjectsList() {
             opacity: 0.5,
           },
         })}
-        onClick={() => setOpened(true)}
+        onClick={() => createProjectModalOpenedVar(true)}
       >
         <IconPencil size={45} />
       </UnstyledButton>
       <Modal
+        centered
         opened={opened}
-        onClose={() => setOpened(false)}
-        title='Create Project'
+        onClose={() => createProjectModalOpenedVar(false)}
+        title='프로젝트 만들기'
       >
         <CraeteProject />
       </Modal>

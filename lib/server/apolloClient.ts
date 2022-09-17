@@ -1,6 +1,7 @@
 import {
   ApolloClient,
   ApolloLink,
+  defaultDataIdFromObject,
   from,
   InMemoryCache,
   NormalizedCacheObject,
@@ -51,13 +52,7 @@ function createApolloClient(ctx: NextPageContext | null) {
   return new ApolloClient({
     ssrMode: !isBrowser,
     link: additiveLink,
-    cache: new InMemoryCache({
-      typePolicies: {
-        Query: {
-          fields: {},
-        },
-      },
-    }),
+    cache: new InMemoryCache({}),
   })
 }
 
