@@ -2,6 +2,7 @@ import { useReactiveVar } from '@apollo/client'
 import { Button, Modal, Pagination } from '@mantine/core'
 import { useState } from 'react'
 import CraeteProject from '../../components/CreateProject'
+import CreateProjectModal from '../../components/CreateProjectModal'
 import Layout from '../../components/Layout'
 import Loading from '../../components/Loading'
 import ProjectsList from '../../components/ProjectsList'
@@ -19,23 +20,19 @@ export default function Projects() {
       },
     },
   })
-  const writeButtonOnClick = () => {
+  const openFn = () => {
     createProjectModalOpenedVar(true)
+  }
+  const closeFn = () => {
+    createProjectModalOpenedVar(false)
   }
   if (loading || !data) return <Loading />
 
   if (data.getProjects.projects && data.getProjects.projects.length === 0) {
     return (
       <Layout centered>
-        <Button onClick={writeButtonOnClick}>새로운 프로젝트 만들기</Button>
-        <Modal
-          centered
-          opened={opened}
-          onClose={() => createProjectModalOpenedVar(false)}
-          title='프로젝트 만들기'
-        >
-          <CraeteProject />
-        </Modal>
+        <Button onClick={openFn}>새로운 프로젝트 만들기</Button>
+        <CreateProjectModal opened={opened} closeFn={closeFn} />
       </Layout>
     )
   }
@@ -43,7 +40,7 @@ export default function Projects() {
   return (
     <Layout>
       <ProjectsList projects={data.getProjects.projects} />
-      <WriteButton actionFn={writeButtonOnClick} />
+      <WriteButton actionFn={openFn} />
       {data.getProjects.totalPages && data.getProjects.totalPages > 10 ? (
         <Pagination
           total={data.getProjects.totalPages || 1}
@@ -57,14 +54,7 @@ export default function Projects() {
           initialPage={5}
         />
       ) : null}
-      <Modal
-        centered
-        opened={opened}
-        onClose={() => createProjectModalOpenedVar(false)}
-        title='프로젝트 만들기'
-      >
-        <CraeteProject />
-      </Modal>
+      <CreateProjectModal opened={opened} closeFn={closeFn} />
     </Layout>
   )
 }
