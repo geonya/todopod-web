@@ -28,7 +28,8 @@ _220822_
   - [x] Email Verification Button
   - [x] User Data (name, email, password ,company)
   - [x] User Role Change
-  - [ ] User Avatar
+  - [x] User Avatar Dropzone
+  - [x] Avatar Upload to AWS S3 storage
 
 - [ ] Profile Page Design Details
 - [ ] Email Verified

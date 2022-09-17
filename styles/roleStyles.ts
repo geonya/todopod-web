@@ -7,7 +7,7 @@ interface UseRoleStylesProps {
 export const useRoleStyles = createStyles(
   (theme, { menuOpened }: UseRoleStylesProps) => ({
     rolesControl: {
-      width: 200,
+      width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',

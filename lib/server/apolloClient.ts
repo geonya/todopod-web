@@ -2,7 +2,6 @@ import {
   ApolloClient,
   ApolloLink,
   from,
-  HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client'
@@ -12,17 +11,13 @@ import { isEqual } from 'lodash'
 import { useMemo } from 'react'
 import { onError } from '@apollo/client/link/error'
 import { NextPageContext } from 'next'
+import { createUploadLink } from 'apollo-upload-client'
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
 const isBrowser = typeof window !== 'undefined'
 
 function createApolloClient(ctx: NextPageContext | null) {
-  const httpLink = new HttpLink({
-    uri: 'http://localhost:4000/graphql',
-    credentials: 'include',
-  })
-
   const authLink = new ApolloLink((operation, forward) => {
     operation.setContext(({ headers }: { headers: any }) => {
       return {
@@ -33,6 +28,14 @@ function createApolloClient(ctx: NextPageContext | null) {
     })
     return forward(operation)
   })
+  const uploadHttpLink = createUploadLink({
+    uri:
+      process.env.NODE_ENV === 'production'
+        ? ''
+        : 'http://localhost:4000/graphql',
+    credentials: 'include',
+  })
+
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors)
       graphQLErrors.forEach(({ message, locations, path }) =>
@@ -43,7 +46,7 @@ function createApolloClient(ctx: NextPageContext | null) {
     if (networkError) console.log(`[Network error]: ${networkError}`)
   })
 
-  const additiveLink = from([authLink, errorLink, httpLink])
+  const additiveLink = from([authLink, errorLink, uploadHttpLink])
 
   return new ApolloClient({
     ssrMode: !isBrowser,

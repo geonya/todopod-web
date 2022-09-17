@@ -14,7 +14,6 @@ export default function ConfirmEmail() {
   const router = useRouter()
   const [verifyEmail, { loading }] = useVerifyEmailMutation({
     onCompleted: (data) => {
-      console.log(data.verifyEmail)
       if (data.verifyEmail.ok && userData?.getMyProfile.user.id) {
         client.writeFragment({
           id: `User:${userData.getMyProfile.user.id}`,
@@ -28,6 +27,8 @@ export default function ConfirmEmail() {
           },
         })
         router.replace('/')
+      } else {
+        router.replace('/users/profile')
       }
     },
   })

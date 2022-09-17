@@ -10,7 +10,9 @@ const USER_FRAGMENT = gql`
     email
     company
     address
-    avatar
+    avatar {
+      url
+    }
     verified
     role
     myProjects {

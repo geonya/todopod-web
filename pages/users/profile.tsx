@@ -1,21 +1,22 @@
+import { gql, useApolloClient } from '@apollo/client'
 import {
   Avatar,
   Box,
   Button,
   CloseButton,
   Group,
-  Image,
   Menu,
   PasswordInput,
   Stack,
-  Text,
   TextInput,
   UnstyledButton,
+  useMantineTheme,
 } from '@mantine/core'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
 import { useForm } from '@mantine/form'
 import { IconChevronDown, IconUser } from '@tabler/icons'
 import { useEffect, useState } from 'react'
+import Label from '../../components/Label'
 import Layout from '../../components/Layout'
 import {
   useEditAccountMutation,
@@ -37,6 +38,7 @@ export default function Profile() {
   // Avatar
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [previewAvatarUrl, setPreviewAvatarUrl] = useState<string | null>(null)
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const makeObjectUrl = (file: File) => {
     const imageUrl = URL.createObjectURL(file)
     return imageUrl
@@ -46,6 +48,7 @@ export default function Profile() {
     const file = files[0]
     const imageUrl = makeObjectUrl(file)
     setPreviewAvatarUrl(imageUrl)
+    setAvatarFile(file)
   }
 
   const avatarPreview = (size: number) => {
@@ -100,8 +103,30 @@ export default function Profile() {
       company: '',
     },
   })
+  const client = useApolloClient()
 
-  const [updateProfile, { loading }] = useEditAccountMutation()
+  const [updateProfile, { loading }] = useEditAccountMutation({
+    onCompleted: (data) => {
+      console.log(userData?.email, userForm.values.email)
+      if (data.editAccount.ok && userData?.id) {
+        if (userData?.email !== userForm.values.email) {
+          client.writeFragment({
+            id: `User:${userData.id}`,
+            fragment: gql`
+              fragment verifiedUser on User {
+                email
+                verified
+              }
+            `,
+            data: {
+              email: userForm.values.email,
+              verified: false,
+            },
+          })
+        }
+      }
+    },
+  })
 
   const userFormOnSubmit = async (data: UserFormValues) => {
     try {
@@ -113,6 +138,7 @@ export default function Profile() {
             email: data.email,
             ...(data.company && { company: data.company }),
             role: selectedRole,
+            file: avatarFile,
           },
         },
       })
@@ -157,9 +183,11 @@ export default function Profile() {
     userForm.setFieldValue('email', userData.email)
     userForm.setFieldValue('company', userData.company || '')
     setSelectedRole(userData.role)
-    setAvatarUrl(userData.avatar || null)
+    setAvatarUrl(userData.avatar?.url || null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData])
+
+  const isEmailVerified = data?.getMyProfile.user.verified === false
   return (
     <Layout centered>
       <Box
@@ -202,13 +230,13 @@ export default function Profile() {
 
         <TextInput
           {...userForm.getInputProps('name')}
-          label='Name'
+          label='이름'
           placeholder={data?.getMyProfile.user.name}
           sx={{ width: '100%' }}
         />
         <PasswordInput
           {...userForm.getInputProps('password')}
-          label='Password'
+          label='비밀번호'
           sx={{ width: '100%' }}
         />
         <TextInput
@@ -216,17 +244,34 @@ export default function Profile() {
           label='E-Mail'
           placeholder={data?.getMyProfile.user.email}
           sx={{ width: '100%' }}
+          error={
+            isEmailVerified && '이메일 인증이 필요합니다. 메일함을 확인해주세요'
+          }
         />
+        {isEmailVerified && (
+          <Button
+            color='red'
+            onClick={emailVerify}
+            sx={{ width: '100%' }}
+            my={10}
+          >
+            E-Mail 인증 다시 보내기
+          </Button>
+        )}
+
         <TextInput
           {...userForm.getInputProps('company')}
-          label='Company'
+          label='회사'
           placeholder={data?.getMyProfile.user.company}
           sx={{ width: '100%' }}
         />
-        {!data?.getMyProfile.user.verified && (
-          <Text color='red'>이메일 인증이 필요합니다.</Text>
-        )}
-        <Box mt={20}>
+
+        <Box
+          sx={{
+            width: '100%',
+          }}
+        >
+          <Label>역할 선택</Label>
           <Menu
             onOpen={() => setMenuOpened(true)}
             onClose={() => setMenuOpened(false)}
@@ -249,10 +294,7 @@ export default function Profile() {
             <Menu.Dropdown>{roles}</Menu.Dropdown>
           </Menu>
         </Box>
-        <Stack mt={20}>
-          <Button color='orange' onClick={emailVerify}>
-            E-Mail 인증하기
-          </Button>
+        <Stack mt={20} sx={{ width: '100%' }}>
           <Button type='submit' disabled={!userForm.isDirty() || loading}>
             수정 완료
           </Button>
