@@ -7,14 +7,21 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from '@mantine/core'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Loading from '../components/Loading'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps)
+
   const [colorScheme, setColorScheme] = useState<ColorScheme>('light')
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
 
+  const [mount, setMount] = useState(false)
+  useEffect(() => {
+    setMount(true)
+  }, [])
+  if (!mount) return <Loading />
   return (
     <>
       <ApolloProvider client={apolloClient}>

@@ -18,6 +18,7 @@ import { IconChevronDown, IconUser } from '@tabler/icons'
 import { useEffect, useState } from 'react'
 import Label from '../../components/Label'
 import Layout from '../../components/Layout'
+import Loading from '../../components/Loading'
 import {
   useEditAccountMutation,
   useGetMyProfileQuery,
@@ -105,30 +106,32 @@ export default function Profile() {
   })
   const client = useApolloClient()
 
-  const [updateProfile, { loading }] = useEditAccountMutation({
-    onCompleted: (data) => {
-      console.log(userData?.email, userForm.values.email)
-      if (data.editAccount.ok && userData?.id) {
-        if (userData?.email !== userForm.values.email) {
-          client.writeFragment({
-            id: `User:${userData.id}`,
-            fragment: gql`
-              fragment verifiedUser on User {
-                email
-                verified
-              }
-            `,
-            data: {
-              email: userForm.values.email,
-              verified: false,
-            },
-          })
+  const [updateProfile, { loading: updateProfileLoading }] =
+    useEditAccountMutation({
+      onCompleted: (data) => {
+        console.log(userData?.email, userForm.values.email)
+        if (data.editAccount.ok && userData?.id) {
+          if (userData?.email !== userForm.values.email) {
+            client.writeFragment({
+              id: `User:${userData.id}`,
+              fragment: gql`
+                fragment verifiedUser on User {
+                  email
+                  verified
+                }
+              `,
+              data: {
+                email: userForm.values.email,
+                verified: false,
+              },
+            })
+          }
         }
-      }
-    },
-  })
+      },
+    })
 
   const userFormOnSubmit = async (data: UserFormValues) => {
+    if (updateProfileLoading) return
     try {
       await updateProfile({
         variables: {
@@ -147,11 +150,12 @@ export default function Profile() {
     }
   }
 
-  const [sendVerificationEmail] = useSendVerificationEmailMutation()
+  const [sendVerificationEmail, { loading: sendVerificationMailLoading }] =
+    useSendVerificationEmailMutation()
 
   const emailVerify = async () => {
     const email = userForm.values.email
-    if (!email) return
+    if (!email || sendVerificationMailLoading) return
     await sendVerificationEmail({
       variables: {
         input: {
@@ -188,6 +192,9 @@ export default function Profile() {
   }, [userData])
 
   const isEmailVerified = data?.getMyProfile.user.verified === false
+
+  if (updateProfileLoading || sendVerificationMailLoading) return <Loading />
+
   return (
     <Layout centered>
       <Box
@@ -254,6 +261,7 @@ export default function Profile() {
             onClick={emailVerify}
             sx={{ width: '100%' }}
             my={10}
+            disabled={sendVerificationMailLoading}
           >
             E-Mail 인증 다시 보내기
           </Button>
@@ -295,7 +303,10 @@ export default function Profile() {
           </Menu>
         </Box>
         <Stack mt={20} sx={{ width: '100%' }}>
-          <Button type='submit' disabled={!userForm.isDirty() || loading}>
+          <Button
+            type='submit'
+            disabled={!userForm.isDirty() || updateProfileLoading}
+          >
             수정 완료
           </Button>
         </Stack>

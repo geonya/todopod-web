@@ -12,6 +12,7 @@ import { IconPencil } from '@tabler/icons'
 import { useState } from 'react'
 import { useGetProjectsQuery } from '../lib/graphql/__generated__'
 import CraeteProject from './CreateProject'
+import Loading from './Loading'
 import Project from './Project'
 
 export const createProjectModalOpenedVar = makeVar(false)
@@ -19,24 +20,18 @@ export const createProjectModalOpenedVar = makeVar(false)
 export default function ProjectsList() {
   const [activePage, setPage] = useState(1)
   const opened = useReactiveVar(createProjectModalOpenedVar)
-  const { loading, error, data, fetchMore, networkStatus } =
-    useGetProjectsQuery({
-      variables: {
-        input: {
-          page: activePage,
-        },
+  const { loading, error, data } = useGetProjectsQuery({
+    variables: {
+      input: {
+        page: activePage,
       },
-    })
+    },
+  })
 
   const projects = data?.getProjects.projects
 
   if (error) return <div>ERROR : {error.message}</div>
-  if (loading)
-    return (
-      <Center sx={{ width: '100%', height: '100vh' }}>
-        <Loader />
-      </Center>
-    )
+  if (loading) return <Loading />
 
   return (
     <Stack>
