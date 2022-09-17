@@ -2,7 +2,7 @@ _220822_
 
 # Todopod Web
 
-### Next.js / GraphQL Apollo Client / MantineUI
+### Next.js / GraphQL Apollo Client / MantineUI / Mailgun
 
 #### TODO List
 
@@ -23,10 +23,13 @@ _220822_
 - [x] Create Project
 - [x] Profile Page Layout
 - [ ] Profile Page functions
+
   - [x] Use Mantine Form
   - [x] Email Verification Button
   - [x] User Data (name, email, password ,company)
   - [x] User Role Change
+  - [ ] User Avatar
+
 - [ ] Profile Page Design Details
 - [ ] Email Verified
 - [ ] 220911 Task List 에서 List State 설정하기

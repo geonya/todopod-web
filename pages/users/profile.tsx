@@ -1,7 +1,10 @@
 import {
+  Avatar,
   Box,
   Button,
+  CloseButton,
   Group,
+  Image,
   Menu,
   PasswordInput,
   Stack,
@@ -9,6 +12,7 @@ import {
   TextInput,
   UnstyledButton,
 } from '@mantine/core'
+import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
 import { useForm } from '@mantine/form'
 import { IconChevronDown, IconUser } from '@tabler/icons'
 import { useEffect, useState } from 'react'
@@ -30,9 +34,60 @@ interface UserFormValues {
 }
 
 export default function Profile() {
-  const [opened, setOpened] = useState(false)
+  // Avatar
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+  const [previewAvatarUrl, setPreviewAvatarUrl] = useState<string | null>(null)
+  const makeObjectUrl = (file: File) => {
+    const imageUrl = URL.createObjectURL(file)
+    return imageUrl
+  }
+  const uploadFileIntoDropzone = (files: File[]) => {
+    if (!files || files.length === 0) return
+    const file = files[0]
+    const imageUrl = makeObjectUrl(file)
+    setPreviewAvatarUrl(imageUrl)
+  }
+
+  const avatarPreview = (size: number) => {
+    if (previewAvatarUrl) {
+      return (
+        <Box>
+          <Avatar
+            src={previewAvatarUrl}
+            size={size}
+            radius={size / 2}
+            onLoad={() => URL.revokeObjectURL(previewAvatarUrl)}
+            sx={{}}
+          />
+        </Box>
+      )
+    }
+    if (avatarUrl) {
+      return (
+        <Avatar
+          src={avatarUrl}
+          size={size}
+          radius={size / 2}
+          onLoad={() => URL.revokeObjectURL(avatarUrl)}
+        />
+      )
+    }
+    return (
+      <Avatar
+        size={size}
+        styles={{
+          placeholder: { background: 'none', margin: 0, padding: 0 },
+        }}
+      />
+    )
+  }
+  //
+
+  // Role
+  const [menuOpened, setMenuOpened] = useState(false)
   const [selectedRole, setSelectedRole] = useState(UserRole['Client'])
-  const { classes: roleClasses } = useRoleStyles({ opened })
+  const { classes: roleClasses } = useRoleStyles({ menuOpened })
+  //
 
   const { data } = useGetMyProfileQuery()
   const userData = data?.getMyProfile.user
@@ -102,6 +157,7 @@ export default function Profile() {
     userForm.setFieldValue('email', userData.email)
     userForm.setFieldValue('company', userData.company || '')
     setSelectedRole(userData.role)
+    setAvatarUrl(userData.avatar || null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData])
   return (
@@ -109,34 +165,71 @@ export default function Profile() {
       <Box
         component='form'
         onSubmit={userForm.onSubmit(userFormOnSubmit)}
-        sx={{ width: 300 }}
+        sx={{
+          width: 300,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
       >
+        <Box sx={{ position: 'relative' }}>
+          {(previewAvatarUrl || avatarUrl) && (
+            <CloseButton
+              size={15}
+              color='red'
+              onClick={() => {
+                setPreviewAvatarUrl(null)
+                setAvatarUrl(null)
+              }}
+              sx={{ position: 'absolute', top: 0, right: 0, zIndex: 10 }}
+            />
+          )}
+
+          <Dropzone
+            accept={IMAGE_MIME_TYPE}
+            onDrop={uploadFileIntoDropzone}
+            styles={{
+              root: {
+                border: 'none',
+                background: 'none',
+                padding: 0,
+              },
+            }}
+          >
+            {avatarPreview(120)}
+          </Dropzone>
+        </Box>
+
         <TextInput
           {...userForm.getInputProps('name')}
           label='Name'
           placeholder={data?.getMyProfile.user.name}
+          sx={{ width: '100%' }}
         />
         <PasswordInput
           {...userForm.getInputProps('password')}
           label='Password'
+          sx={{ width: '100%' }}
         />
         <TextInput
           {...userForm.getInputProps('email')}
           label='E-Mail'
           placeholder={data?.getMyProfile.user.email}
+          sx={{ width: '100%' }}
         />
         <TextInput
           {...userForm.getInputProps('company')}
           label='Company'
           placeholder={data?.getMyProfile.user.company}
+          sx={{ width: '100%' }}
         />
         {!data?.getMyProfile.user.verified && (
           <Text color='red'>이메일 인증이 필요합니다.</Text>
         )}
         <Box mt={20}>
           <Menu
-            onOpen={() => setOpened(true)}
-            onClose={() => setOpened(false)}
+            onOpen={() => setMenuOpened(true)}
+            onClose={() => setMenuOpened(false)}
             radius='md'
             width='target'
           >

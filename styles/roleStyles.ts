@@ -1,11 +1,11 @@
 import { createStyles } from '@mantine/core'
 
 interface UseRoleStylesProps {
-  opened: boolean
+  menuOpened: boolean
 }
 
 export const useRoleStyles = createStyles(
-  (theme, { opened }: UseRoleStylesProps) => ({
+  (theme, { menuOpened }: UseRoleStylesProps) => ({
     rolesControl: {
       width: 200,
       display: 'flex',
@@ -21,8 +21,8 @@ export const useRoleStyles = createStyles(
       transition: 'background-color 150ms ease',
       backgroundColor:
         theme.colorScheme === 'dark'
-          ? theme.colors.dark[opened ? 5 : 6]
-          : opened
+          ? theme.colors.dark[menuOpened ? 5 : 6]
+          : menuOpened
           ? theme.colors.gray[0]
           : theme.white,
       '&:hover': {
@@ -38,7 +38,7 @@ export const useRoleStyles = createStyles(
     },
     icon: {
       transition: 'transform 150ms ease',
-      transform: opened ? 'rotate(180deg)' : 'rotate(0deg',
+      transform: menuOpened ? 'rotate(180deg)' : 'rotate(0deg',
     },
   }),
 )

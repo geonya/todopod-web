@@ -33,10 +33,10 @@ interface AccountFormValues {
 
 const Account: NextPage = () => {
   const router = useRouter()
-  const [opened, setOpened] = useState(false)
+  const [menuOpened, setMenuOpened] = useState(false)
   const [accountError, setAccountError] = useState('')
   const { classes } = useAuthStyles()
-  const { classes: roleClasses } = useRoleStyles({ opened })
+  const { classes: roleClasses } = useRoleStyles({ menuOpened })
   const [selected, setSelected] = useState(UserRole['Client'])
   const form = useForm<AccountFormValues>({
     initialValues: { name: '', email: '', password: '', role: UserRole.Client },
@@ -147,8 +147,8 @@ const Account: NextPage = () => {
             {...form.getInputProps('password')}
           />
           <Menu
-            onOpen={() => setOpened(true)}
-            onClose={() => setOpened(false)}
+            onOpen={() => setMenuOpened(true)}
+            onClose={() => setMenuOpened(false)}
             radius='md'
             width='target'
           >
