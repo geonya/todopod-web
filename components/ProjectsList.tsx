@@ -1,16 +1,4 @@
-import { makeVar, NetworkStatus, useReactiveVar } from '@apollo/client'
-import {
-  Center,
-  Grid,
-  Loader,
-  Modal,
-  Pagination,
-  Stack,
-  Text,
-  UnstyledButton,
-} from '@mantine/core'
-import { IconPencil } from '@tabler/icons'
-import { useState } from 'react'
+import { Grid } from '@mantine/core'
 import ProjectCard from './Project'
 
 interface IProject {

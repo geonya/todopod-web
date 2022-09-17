@@ -2,8 +2,8 @@ import { gql } from '@apollo/client'
 import { Button, createStyles, Select, TextInput } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
 import { useForm } from '@mantine/form'
+import { createProjectModalOpenedVar } from '../lib/client/apolloVars'
 import { useCreateProjectMutation } from '../lib/graphql/__generated__'
-import { createProjectModalOpenedVar } from './ProjectsList'
 
 interface CreateProjectFormValues {
   title: string

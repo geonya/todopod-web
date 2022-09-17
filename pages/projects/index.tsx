@@ -1,14 +1,13 @@
-import { makeVar, useReactiveVar } from '@apollo/client'
-import { Modal, Pagination, Text } from '@mantine/core'
+import { useReactiveVar } from '@apollo/client'
+import { Button, Modal, Pagination } from '@mantine/core'
 import { useState } from 'react'
 import CraeteProject from '../../components/CreateProject'
 import Layout from '../../components/Layout'
 import Loading from '../../components/Loading'
 import ProjectsList from '../../components/ProjectsList'
 import WriteButton from '../../components/WriteButton'
+import { createProjectModalOpenedVar } from '../../lib/client/apolloVars'
 import { useGetProjectsQuery } from '../../lib/graphql/__generated__'
-
-export const createProjectModalOpenedVar = makeVar(false)
 
 export default function Projects() {
   const [activePage, setPage] = useState(1)
@@ -28,7 +27,15 @@ export default function Projects() {
   if (data.getProjects.projects && data.getProjects.projects.length === 0) {
     return (
       <Layout centered>
-        <Text>새로운 프로젝트 만들기</Text>
+        <Button onClick={writeButtonOnClick}>새로운 프로젝트 만들기</Button>
+        <Modal
+          centered
+          opened={opened}
+          onClose={() => createProjectModalOpenedVar(false)}
+          title='프로젝트 만들기'
+        >
+          <CraeteProject />
+        </Modal>
       </Layout>
     )
   }
@@ -37,7 +44,7 @@ export default function Projects() {
     <Layout>
       <ProjectsList projects={data.getProjects.projects} />
       <WriteButton actionFn={writeButtonOnClick} />
-      {data.getProjects.totalPages && data.getProjects.totalPages <= 10 ? (
+      {data.getProjects.totalPages && data.getProjects.totalPages > 10 ? (
         <Pagination
           total={data.getProjects.totalPages || 1}
           sx={{ width: '100%' }}
