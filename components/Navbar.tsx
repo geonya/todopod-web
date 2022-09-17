@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/client'
 import {
   ActionIcon,
   Badge,
@@ -137,13 +138,18 @@ export default function NavbarSearch() {
   const { classes } = useStyles()
   const { data } = useGetMyProfileQuery()
   const router = useRouter()
+  const client = useApolloClient()
   const [logout, { loading }] = useLogoutMutation({
     onCompleted: (result) => {
       if (result.logout.ok) {
         isLoggedInVar(false)
         router.push('/login')
+
+        // reset cache
+        client.clearStore()
       }
       if (result.logout.error) {
+        console.error(result.logout.error)
         alert(result.logout.error)
       }
     },
